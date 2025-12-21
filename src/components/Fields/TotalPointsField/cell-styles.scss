@@ -1,0 +1,56 @@
+@import '~@payloadcms/ui/scss';
+
+.total-points-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  background: linear-gradient(135deg, var(--theme-success-100) 0%, var(--theme-success-200) 100%);
+  border-radius: 12px;
+  border: 1px solid var(--theme-success-300);
+  font-weight: 600;
+
+  &__value {
+    font-size: 0.9375rem;
+    color: var(--theme-success-900);
+  }
+
+  &__label {
+    font-size: 0.75rem;
+    color: var(--theme-success-700);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__spinner {
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--theme-elevation-300);
+    border-top-color: var(--theme-success-500);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Dark mode adjustments
+@media (prefers-color-scheme: dark) {
+  .total-points-cell {
+    background: linear-gradient(135deg, var(--theme-success-900) 0%, var(--theme-success-800) 100%);
+    border-color: var(--theme-success-600);
+
+    &__value {
+      color: var(--theme-success-50);
+    }
+
+    &__label {
+      color: var(--theme-success-200);
+    }
+  }
+}
+

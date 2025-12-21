@@ -1,0 +1,195 @@
+@import '~@payloadcms/ui/scss';
+
+.total-points-field {
+  width: 100%;
+  padding: var(--gutter-h);
+  background: var(--theme-elevation-50);
+  border-radius: var(--border-radius-m);
+  border: 1px solid var(--theme-elevation-200);
+
+  &__header {
+    margin-bottom: calc(var(--base) * 1.5);
+
+    h3 {
+      margin: 0 0 var(--base) 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--theme-text);
+    }
+  }
+
+  &__description {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--theme-elevation-600);
+  }
+
+  &__loading,
+  &__error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--base);
+    padding: calc(var(--base) * 2);
+    font-size: 0.875rem;
+    color: var(--theme-elevation-600);
+  }
+
+  &__spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--theme-elevation-300);
+    border-top-color: var(--theme-success-500);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  &__error {
+    color: var(--theme-error-500);
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: calc(var(--base) * 1.5);
+    margin-bottom: calc(var(--base) * 2);
+
+    @include mid-break {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__stat {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--base) * 1.25);
+    padding: calc(var(--base) * 1.25);
+    background: var(--theme-elevation-0);
+    border-radius: var(--border-radius-m);
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    &--first {
+      border-color: #ffd700;
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.05) 0%, rgba(255, 165, 0, 0.05) 100%);
+    }
+
+    &--second {
+      border-color: #c0c0c0;
+      background: linear-gradient(135deg, rgba(192, 192, 192, 0.05) 0%, rgba(168, 168, 168, 0.05) 100%);
+    }
+
+    &--third {
+      border-color: #cd7f32;
+      background: linear-gradient(135deg, rgba(205, 127, 50, 0.05) 0%, rgba(184, 115, 51, 0.05) 100%);
+    }
+  }
+
+  &__stat-icon {
+    font-size: 2rem;
+    line-height: 1;
+  }
+
+  &__stat-content {
+    flex: 1;
+  }
+
+  &__stat-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--theme-elevation-600);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+
+  &__stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--theme-text);
+  }
+
+  &__total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: calc(var(--base) * 1.5);
+    background: linear-gradient(135deg, var(--theme-success-50) 0%, var(--theme-success-100) 100%);
+    border-radius: var(--border-radius-m);
+    border: 2px solid var(--theme-success-300);
+  }
+
+  &__total-label {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--theme-success-800);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  &__total-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--theme-success-900);
+    background: var(--theme-elevation-0);
+    padding: 8px 20px;
+    border-radius: var(--border-radius-s);
+    min-width: 80px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Dark mode adjustments
+@media (prefers-color-scheme: dark) {
+  .total-points-field {
+    background: var(--theme-elevation-100);
+    border-color: var(--theme-elevation-300);
+
+    &__stat {
+      background: var(--theme-elevation-200);
+
+      &--first {
+        background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 165, 0, 0.1) 100%);
+      }
+
+      &--second {
+        background: linear-gradient(135deg, rgba(192, 192, 192, 0.1) 0%, rgba(168, 168, 168, 0.1) 100%);
+      }
+
+      &--third {
+        background: linear-gradient(135deg, rgba(205, 127, 50, 0.1) 0%, rgba(184, 115, 51, 0.1) 100%);
+      }
+
+      &:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      }
+    }
+
+    &__total {
+      background: linear-gradient(135deg, var(--theme-success-900) 0%, var(--theme-success-800) 100%);
+      border-color: var(--theme-success-600);
+    }
+
+    &__total-label {
+      color: var(--theme-success-100);
+    }
+
+    &__total-value {
+      color: var(--theme-success-50);
+      background: var(--theme-elevation-400);
+    }
+  }
+}
+

@@ -1,0 +1,153 @@
+@import '~@payloadcms/ui/scss';
+
+.results-field {
+  width: 100%;
+  padding: var(--gutter-h);
+  background: var(--theme-elevation-50);
+  border-radius: var(--border-radius-m);
+  border: 1px solid var(--theme-elevation-200);
+
+  &__header {
+    margin-bottom: calc(var(--base) * 1.5);
+
+    h3 {
+      margin: 0 0 var(--base) 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--theme-text);
+    }
+  }
+
+  &__description {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--theme-elevation-600);
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: calc(var(--base) * 1.5);
+
+    @include mid-break {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__position {
+    background: var(--theme-elevation-0);
+    border-radius: var(--border-radius-m);
+    padding: calc(var(--base) * 1.25);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+
+    &:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    &--first {
+      border-color: #ffd700;
+
+      .results-field__position-header {
+        background: linear-gradient(135deg, #ffd700 0%, #ffa500 100%);
+      }
+    }
+
+    &--second {
+      border-color: #c0c0c0;
+
+      .results-field__position-header {
+        background: linear-gradient(135deg, #c0c0c0 0%, #a8a8a8 100%);
+      }
+    }
+
+    &--third {
+      border-color: #cd7f32;
+
+      .results-field__position-header {
+        background: linear-gradient(135deg, #cd7f32 0%, #b87333 100%);
+      }
+    }
+  }
+
+  &__position-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--base);
+    padding: var(--base);
+    border-radius: var(--border-radius-s);
+    margin-bottom: calc(var(--base) * 1.25);
+    color: white;
+    font-weight: 600;
+  }
+
+  &__medal {
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+
+  &__rank {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__field-wrapper {
+    // Remove default label and styling from the relationship field
+    :global(.field-type-relationship) {
+      margin: 0;
+
+      :global(.field__label) {
+        display: none;
+      }
+
+      :global(.field__error) {
+        margin-top: var(--base);
+      }
+    }
+
+    // Style the select dropdown
+    :global(.rs__control) {
+      border: 1px solid var(--theme-elevation-400);
+      background: var(--theme-elevation-0);
+
+      &:hover {
+        border-color: var(--theme-elevation-500);
+      }
+    }
+
+    :global(.rs__control--is-focused) {
+      border-color: var(--theme-success-500);
+      box-shadow: 0 0 0 1px var(--theme-success-500);
+    }
+
+    :global(.rs__placeholder) {
+      color: var(--theme-elevation-600);
+      font-style: italic;
+    }
+
+    :global(.rs__single-value) {
+      color: var(--theme-text);
+      font-weight: 500;
+    }
+  }
+}
+
+// Dark mode adjustments
+@media (prefers-color-scheme: dark) {
+  .results-field {
+    background: var(--theme-elevation-100);
+    border-color: var(--theme-elevation-300);
+
+    &__position {
+      background: var(--theme-elevation-200);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+      &:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      }
+    }
+  }
+}

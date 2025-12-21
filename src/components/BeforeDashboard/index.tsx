@@ -2,6 +2,7 @@ import { Banner } from '@payloadcms/ui/elements/Banner'
 import React from 'react'
 
 import { SeedButton } from './SeedButton'
+import { SeedEventButton } from './SeedEventButton'
 import './index.scss'
 
 const baseClass = 'before-dashboard'
@@ -21,6 +22,10 @@ const BeforeDashboard: React.FC = () => {
             visit your website
           </a>
           {' to see the results.'}
+        </li>
+        <li>
+          <SeedEventButton />
+          {' to seed the event data.'}
         </li>
         <li>
           {'Modify your '}

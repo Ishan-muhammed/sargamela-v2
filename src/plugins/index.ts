@@ -9,10 +9,10 @@ import jsonImporter from './plugin-json-importer'
 
 export const plugins: Plugin[] = [
   redirects,
-  nestedDocs,
+  // nestedDocs,
   seo,
   formBuilder,
-  search,
+  // search,
   importExport,
   jsonImporter,
 ]

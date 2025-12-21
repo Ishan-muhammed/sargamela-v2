@@ -2,7 +2,7 @@ import { redirectsPlugin } from '@payloadcms/plugin-redirects'
 import { revalidateRedirects } from '@/hooks/revalidateRedirects'
 
 export const redirects = redirectsPlugin({
-  collections: ['pages', 'posts'],
+  collections: ['pages'],
   overrides: {
     // @ts-expect-error - This is a valid override, mapped fields don't resolve to the same type
     fields: ({ defaultFields }) => {

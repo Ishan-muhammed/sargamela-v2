@@ -3,7 +3,7 @@ import { beforeSyncWithSearch } from '@/search/beforeSync'
 import { searchFields } from '@/search/fieldOverrides'
 
 export const search = searchPlugin({
-  collections: ['posts'],
+  collections: [''],
   beforeSync: beforeSyncWithSearch,
   searchOverrides: {
     fields: ({ defaultFields }) => {

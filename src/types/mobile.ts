@@ -22,7 +22,7 @@ export interface PivotTableData {
 export interface MobileGeneralData {
   flashNews: DefaultTypedEditorState | null
   scrollNews: string[]
-  programStatus: 'Live' | 'Upcoming' | 'Completed'
+  programStatus: 'upcoming' | 'live' | 'completed'
   adImageUrl: string
 }
 

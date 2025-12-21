@@ -53,9 +53,22 @@ export async function GET() {
       depth: 1,
     })
 
+    // Get all event categories for mapping
+    const { docs: eventCategories } = await payload.find({
+      collection: 'eventCategories',
+      limit: 100,
+      depth: 0,
+    })
+
+    // Create a map of category slug to ID
+    const categorySlugToId = new Map<string, number>()
+    eventCategories.forEach((cat) => {
+      categorySlugToId.set(cat.slug, cat.id)
+    })
+
     // Calculate points for each participant
     const participantPoints = new Map<
-      string,
+      number,
       {
         totalPoints: number
         firstPlaces: number
@@ -108,7 +121,7 @@ export async function GET() {
       .map((p) => {
         const stats = participantPoints.get(p.id)!
         return {
-          id: p.id,
+          id: String(p.id),
           name: p.name,
           totalPoints: stats.totalPoints,
           firstPlaces: stats.firstPlaces,
@@ -119,11 +132,11 @@ export async function GET() {
       .sort((a, b) => b.totalPoints - a.totalPoints)
 
     // Build category-wise pivot tables
-    const categories = ['kids', 'children', 'subJuniors', 'juniors', 'seniors']
+    const categories = ['kids', 'children', 'sub-juniors', 'juniors', 'seniors']
     const categoryLabels: Record<string, string> = {
       kids: 'Kids',
       children: 'Children',
-      subJuniors: 'Sub Juniors',
+      'sub-juniors': 'Sub Juniors',
       juniors: 'Juniors',
       seniors: 'Seniors',
     }
@@ -131,8 +144,15 @@ export async function GET() {
     const categoryData: CategoryData[] = []
 
     for (const category of categories) {
+      // Get the category ID from slug
+      const categoryId = categorySlugToId.get(category)
+
       // Get competition items for this category
-      const categoryItems = competitionItems.filter((item) => item.category === category)
+      const categoryItems = competitionItems.filter((item) => {
+        // Handle both number ID and populated EventCategory object
+        const itemCategoryId = typeof item.category === 'number' ? item.category : item.category?.id
+        return itemCategoryId === categoryId
+      })
 
       if (categoryItems.length === 0) {
         categoryData.push({
@@ -187,30 +207,17 @@ export async function GET() {
       })
     }
 
-    // Get scroll news from posts
-    const { docs: posts } = await payload.find({
-      collection: 'posts',
-      where: {
-        _status: { equals: 'published' },
-      },
-      sort: '-publishedAt',
-      limit: 10,
-      depth: 0,
-    })
-
-    const scrollNews = posts.map((post) => post.title || 'Untitled')
-
     // Build response
     const response = {
       scoreboard,
       categories: categoryData,
       general: {
         flashNews: settings.flashNews || null,
-        scrollNews,
-        programStatus: settings.programStatus || 'Completed',
+        scrollNews: [],
+        programStatus: settings.eventStatus || 'completed',
         adImageUrl:
-          typeof settings.adImage === 'object' && settings.adImage?.url
-            ? settings.adImage.url
+          typeof settings.adImageUrl === 'object' && settings.adImageUrl?.url
+            ? settings.adImageUrl.url
             : '',
       },
     }
@@ -221,4 +228,3 @@ export async function GET() {
     return NextResponse.json({ error: 'Failed to fetch mobile data' }, { status: 500 })
   }
 }
-

@@ -2,8 +2,8 @@
 
 import React from 'react'
 import { motion } from 'framer-motion'
+import { PivotTableData } from '../../app/(frontend)/types'
 import { ChevronRight } from 'lucide-react'
-import type { PivotTableData } from '@/types/mobile'
 
 interface MobilePivotTableProps {
   data: PivotTableData

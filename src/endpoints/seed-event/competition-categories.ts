@@ -1,4 +1,4 @@
-const eventCategories = [
+const competitionCategories = [
   {
     name: 'Kids',
     slug: 'kids',
@@ -26,4 +26,4 @@ const eventCategories = [
   },
 ]
 
-export default eventCategories
+export default competitionCategories

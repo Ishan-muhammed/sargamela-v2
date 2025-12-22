@@ -1,5 +1,5 @@
 import { Payload, PayloadRequest } from 'payload'
-import eventCategories from './event-categories'
+import competitionCategories from './competition-categories'
 
 export const seedEvent = async ({
   payload,
@@ -9,10 +9,10 @@ export const seedEvent = async ({
   req: PayloadRequest
 }): Promise<void> => {
   payload.logger.info('Seeding event...')
-  for (const eventCategory of eventCategories) {
+  for (const competitionCategory of competitionCategories) {
     await payload.create({
-      collection: 'eventCategories',
-      data: eventCategory,
+      collection: 'competitionCategories',
+      data: competitionCategory,
     })
   }
 }

@@ -12,6 +12,7 @@ import { RenderHero } from '@/heros/RenderHero'
 import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
+import HomePage from '../../../components/FestSite/Home'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -56,8 +57,10 @@ export default async function Page({ params: paramsPromise }: Args) {
   })
 
   // Remove this code once your website is seeded
-  if (!page && slug === 'home') {
-    page = homeStatic
+  const festSitePages = ['home', 'scores', 'details', 'news']
+  if (!page && festSitePages.includes(slug)) {
+    // page = homeStatic
+    return <HomePage />
   }
 
   if (!page) {
@@ -87,6 +90,21 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   const page = await queryPageBySlug({
     slug: decodedSlug,
   })
+
+  // For fest site pages (home, scores, details, news), use SEO global
+  const festSitePages = ['home', 'scores', 'details', 'news']
+  if (festSitePages.includes(slug)) {
+    const payload = await getPayload({ config: configPromise })
+    const seo = await payload.findGlobal({
+      slug: 'seo',
+      draft: false,
+    })
+
+    return {
+      title: seo.siteName,
+      description: seo.siteDescription,
+    }
+  }
 
   return generateMeta({ doc: page })
 }

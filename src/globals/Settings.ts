@@ -7,6 +7,7 @@ import {
   InlineToolbarFeature,
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
+import hooks from './hooks'
 
 export const Settings: GlobalConfig = {
   slug: 'settings',
@@ -19,22 +20,22 @@ export const Settings: GlobalConfig = {
       type: 'tabs',
       tabs: [
         {
-          label: 'Event Information',
+          label: 'Fest Information',
           fields: [
             {
-              name: 'eventName',
+              name: 'festName',
               type: 'text',
               required: true,
               defaultValue: 'Sargamela 2025',
               admin: {
-                description: 'The name of the event displayed throughout the site',
+                description: 'The name of the fest displayed throughout the site',
               },
             },
             {
-              name: 'eventDescription',
+              name: 'festDescription',
               type: 'textarea',
               admin: {
-                description: 'A brief description of the event',
+                description: 'A brief description of the fest',
               },
             },
             {
@@ -99,17 +100,17 @@ export const Settings: GlobalConfig = {
               },
             },
             {
-              name: 'eventDate',
+              name: 'festDate',
               type: 'date',
               admin: {
-                description: 'The date of the event',
+                description: 'The date of the fest',
                 date: {
                   pickerAppearance: 'dayAndTime',
                 },
               },
             },
             {
-              name: 'eventStatus',
+              name: 'festStatus',
               type: 'select',
               required: true,
               defaultValue: 'upcoming',
@@ -128,23 +129,23 @@ export const Settings: GlobalConfig = {
                 },
               ],
               admin: {
-                description: 'Current status of the event',
+                description: 'Current status of the fest',
               },
             },
             {
-              name: 'eventLogo',
+              name: 'festLogo',
               type: 'upload',
               relationTo: 'media',
               admin: {
-                description: 'The main logo for the event',
+                description: 'The main logo for the fest',
               },
             },
             {
-              name: 'eventBanner',
+              name: 'festBanner',
               type: 'upload',
               relationTo: 'media',
               admin: {
-                description: 'Banner image for the event',
+                description: 'Banner image for the fest',
               },
             },
           ],
@@ -153,18 +154,62 @@ export const Settings: GlobalConfig = {
           label: 'Live Display Settings',
           fields: [
             {
-              name: 'flashNews',
-              type: 'richText',
-              editor: lexicalEditor({
-                features: ({ rootFeatures }) => {
-                  return [
-                    ...rootFeatures,
-                    FixedToolbarFeature(),
-                    InlineToolbarFeature(),
-                    HorizontalRuleFeature(),
-                  ]
+              name: 'introSlide',
+              type: 'group',
+              admin: {
+                description: 'Configure the intro slide that appears at the start of live display',
+              },
+              fields: [
+                {
+                  name: 'topLabel',
+                  type: 'text',
+                  required: true,
+                  defaultValue: 'ഫറോക്ക് മണ്ഡലം',
+                  admin: {
+                    description: 'Top label text (shown in red banner)',
+                  },
                 },
-              }),
+                {
+                  name: 'titleLine1',
+                  type: 'text',
+                  required: true,
+                  defaultValue: 'മദ്രസ',
+                  admin: {
+                    description: 'First line of main title',
+                  },
+                },
+                {
+                  name: 'titleLine2',
+                  type: 'text',
+                  required: true,
+                  defaultValue: 'സർഗ്ഗമേള',
+                  admin: {
+                    description: 'Second line of main title (shown in gold)',
+                  },
+                },
+                {
+                  name: 'titleLine3',
+                  type: 'text',
+                  required: true,
+                  defaultValue: '2025',
+                  admin: {
+                    description: 'Third line of main title (usually year)',
+                  },
+                },
+                {
+                  name: 'bottomText',
+                  type: 'text',
+                  required: true,
+                  defaultValue: 'Live Updates',
+                  admin: {
+                    description: 'Text shown at bottom with pulsing indicator',
+                  },
+                },
+              ],
+            },
+            {
+              name: 'flashNews',
+              type: 'textarea',
               admin: {
                 description:
                   'Urgent flash news that will be displayed prominently (leave empty to hide)',
@@ -190,23 +235,6 @@ export const Settings: GlobalConfig = {
               relationTo: 'media',
               admin: {
                 description: 'Advertisement image to display during transitions',
-              },
-            },
-            {
-              name: 'autoRotateEnabled',
-              type: 'checkbox',
-              defaultValue: true,
-              admin: {
-                description: 'Enable automatic rotation of display views',
-              },
-            },
-            {
-              name: 'rotationInterval',
-              type: 'number',
-              defaultValue: 10,
-              admin: {
-                description: 'Seconds between view rotations (if auto-rotate is enabled)',
-                condition: (data) => data.autoRotateEnabled === true,
               },
             },
           ],
@@ -358,42 +386,6 @@ export const Settings: GlobalConfig = {
           label: 'Programs & Schedules',
           fields: [
             {
-              name: 'programSchedule',
-              type: 'array',
-              admin: {
-                description: 'Event program schedule',
-              },
-              fields: [
-                {
-                  name: 'title',
-                  type: 'text',
-                  required: true,
-                },
-                {
-                  name: 'time',
-                  type: 'text',
-                  required: true,
-                  admin: {
-                    description: 'Time of the program (e.g., "10:00 AM - 11:00 AM")',
-                  },
-                },
-                {
-                  name: 'description',
-                  type: 'textarea',
-                },
-                {
-                  name: 'type',
-                  type: 'select',
-                  options: [
-                    { label: 'Stage Event', value: 'stage' },
-                    { label: 'Off-Stage Event', value: 'offstage' },
-                    { label: 'Break', value: 'break' },
-                    { label: 'Other', value: 'other' },
-                  ],
-                },
-              ],
-            },
-            {
               name: 'programFiles',
               type: 'array',
               admin: {
@@ -418,6 +410,7 @@ export const Settings: GlobalConfig = {
       ],
     },
   ],
+  hooks: hooks,
 }
 
 export default Settings

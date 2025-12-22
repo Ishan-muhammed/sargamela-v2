@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useRef, useEffect } from 'react'
-import { TICKER_NEWS } from '../constants'
+import { TICKER_NEWS } from '../../app/(live)/constants'
 
 interface LayoutProps {
   children: React.ReactNode
@@ -20,6 +20,7 @@ export const Layout: React.FC<LayoutProps> = ({
   useEffect(() => {
     // Update cache only when we have actual data
     if (scrollNews !== undefined) {
+      console.log('scrollNews', scrollNews)
       if (scrollNews.length > 0) {
         lastValidScrollNews.current = scrollNews
       } else {
@@ -69,4 +70,3 @@ export const Layout: React.FC<LayoutProps> = ({
     </div>
   )
 }
-

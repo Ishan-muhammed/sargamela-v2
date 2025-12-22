@@ -1,22 +1,22 @@
 'use client'
 
 import React, { useState, useEffect, useMemo } from 'react'
-import { Layout } from '../components/Layout'
-import { IntroSlide } from '../components/IntroSlide'
-import { ScoreboardSlide } from '../components/ScoreboardSlide'
-import { PivotTableSlide } from '../components/PivotTableSlide'
-import { FlashNewsSlide } from '../components/FlashNewsSlide'
-import { AdSlide } from '../components/AdSlide'
+import { Layout } from '../../../components/LivePage/Layout'
+import { IntroSlide } from '../../../components/LivePage/IntroSlide'
+import { ScoreboardSlide } from '../../../components/LivePage/ScoreboardSlide'
+import { PivotTableSlide } from '../../../components/LivePage/PivotTableSlide'
+import { FlashNewsSlide } from '../../../components/LivePage/FlashNewsSlide'
+import { AdSlide } from '../../../components/LivePage/AdSlide'
 import { URGENT_FLASH_NEWS } from '../constants'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   useAllCategoriesData,
-  useScoreboardMadrasas,
+  useScoreboardParticipants,
   useGeneralData,
-  sheetQueryKeys,
-} from '../hooks/useSheetData'
-import { PivotTableData } from '../types'
+  festQueryKeys,
+} from '../hooks/useFestData'
 import { useQueryClient } from '@tanstack/react-query'
+import { PivotTableData } from '@/types/common'
 
 // Configure durations for each slide in milliseconds
 const DURATIONS = {
@@ -36,15 +36,21 @@ const LivePage: React.FC = () => {
 
   // Fetch all categories data using TanStack Query
   const categoriesData = useAllCategoriesData()
-  const { madrasas, isLoading: scoreboardLoading } = useScoreboardMadrasas()
+  const { participants, isLoading: scoreboardLoading } = useScoreboardParticipants()
   const { data: generalData, isLoading: generalLoading } = useGeneralData(generalRefetchInterval)
 
-  // Use real data from Google Sheets
-  const displayMadrasas = madrasas
+  // Use real data from Fest API
+  const displayParticipants = participants
   // Only show flash news if there's actual content (not empty string)
-  const flashNewsContent = generalData?.flashNews?.trim() || URGENT_FLASH_NEWS
+  const flashNewsContent =
+    typeof generalData?.flashNews === 'string'
+      ? generalData.flashNews.trim() || URGENT_FLASH_NEWS
+      : URGENT_FLASH_NEWS
   const programStatus = generalData?.programStatus || 'Completed'
-  const adImageUrl = generalData?.adImageUrl?.trim() || ''
+  const adImageUrl = generalData?.adImageUrl || ''
+  const scrollNews = generalData?.scrollNews || []
+  const introSlide = generalData?.introSlide
+  const participantLabel = generalData?.participantLabel || 'മദ്രസ'
 
   // Construct the sequence of views dynamically from fetched data
   // 0: Intro
@@ -119,7 +125,7 @@ const LivePage: React.FC = () => {
       duration = DURATIONS.FLASH
       // Refetch general data when Flash News completes
       const refetchTimer = setTimeout(() => {
-        queryClient.invalidateQueries({ queryKey: sheetQueryKeys.general() })
+        queryClient.invalidateQueries({ queryKey: festQueryKeys.fullDetails() })
       }, duration - 500) // Refetch 500ms before transitioning
     } else if (currentViewConfig.type === 'AD') {
       duration = DURATIONS.AD
@@ -145,6 +151,15 @@ const LivePage: React.FC = () => {
       console.log('Formatted Juniors Data:', categoriesData.juniors.data)
       console.log('Formatted Seniors Data:', categoriesData.seniors.data)
     }
+
+    // Debug scroll news
+    if (generalData) {
+      console.log('General Data:', {
+        scrollNews: generalData.scrollNews,
+        flashNews: generalData.flashNews,
+        programStatus: generalData.programStatus,
+      })
+    }
   }, [
     categoriesData.isLoading,
     categoriesData.isError,
@@ -153,12 +168,13 @@ const LivePage: React.FC = () => {
     categoriesData.subJuniors.data,
     categoriesData.juniors.data,
     categoriesData.seniors.data,
+    generalData,
   ])
 
   const currentView = views[viewIndex]
 
   return (
-    <Layout scrollNews={generalData?.scrollNews} programStatus={programStatus}>
+    <Layout scrollNews={scrollNews} programStatus={programStatus}>
       <AnimatePresence mode="wait">
         <motion.div
           key={viewIndex}
@@ -168,11 +184,16 @@ const LivePage: React.FC = () => {
           transition={{ duration: 0.5 }}
           className="flex-grow flex flex-col h-full w-full"
         >
-          {currentView.type === 'INTRO' && <IntroSlide />}
-          {currentView.type === 'SCOREBOARD' && <ScoreboardSlide madrasas={displayMadrasas} />}
-          {currentView.type === 'TABLE' && (
-            // @ts-ignore - dynamic type check safe
-            <PivotTableSlide data={currentView.data} pageIndex={currentView.index} />
+          {currentView.type === 'INTRO' && <IntroSlide {...introSlide} />}
+          {currentView.type === 'SCOREBOARD' && (
+            <ScoreboardSlide participants={displayParticipants} />
+          )}
+          {currentView.type === 'TABLE' && currentView.data && (
+            <PivotTableSlide
+              data={currentView.data}
+              pageIndex={currentView.index ?? 0}
+              participantLabel={participantLabel}
+            />
           )}
           {currentView.type === 'FLASH' && <FlashNewsSlide content={flashNewsContent} />}
           {currentView.type === 'AD' && <AdSlide imageUrl={adImageUrl} />}

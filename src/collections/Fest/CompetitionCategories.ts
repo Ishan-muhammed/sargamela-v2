@@ -2,8 +2,8 @@ import { authenticated } from '@/access/authenticated'
 import { authenticatedOrPublished } from '@/access/authenticatedOrPublished'
 import { slugField, type CollectionConfig } from 'payload'
 
-export const EventCategories: CollectionConfig<'eventCategories'> = {
-  slug: 'eventCategories',
+export const CompetitionCategories: CollectionConfig<'competitionCategories'> = {
+  slug: 'competitionCategories',
   admin: {
     defaultColumns: ['name', 'slug', 'order'],
     group: 'Event',
@@ -26,7 +26,7 @@ export const EventCategories: CollectionConfig<'eventCategories'> = {
       type: 'text',
       admin: {
         description:
-          'The name of the event category like "Kids", "Children", "Sub Juniors", "Juniors", "Seniors"',
+          'The name of the competition category like "Kids", "Children", "Sub Juniors", "Juniors", "Seniors"',
       },
       required: true,
     },
@@ -37,7 +37,7 @@ export const EventCategories: CollectionConfig<'eventCategories'> = {
       required: true,
       defaultValue: 0,
       admin: {
-        description: 'The order of the event category in the list, 0 is the first',
+        description: 'The order of the competition category in the list, 0 is the first',
         position: 'sidebar',
       },
     },
@@ -50,4 +50,4 @@ export const EventCategories: CollectionConfig<'eventCategories'> = {
   ],
 }
 
-export default EventCategories
+export default CompetitionCategories

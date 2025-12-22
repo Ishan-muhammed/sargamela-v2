@@ -2,14 +2,19 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { PivotTableData } from '../types'
+import { PivotTableData } from '@/app/(frontend)/types'
 
 interface PivotTableSlideProps {
   data: PivotTableData
   pageIndex: number
+  participantLabel?: string
 }
 
-export const PivotTableSlide: React.FC<PivotTableSlideProps> = ({ data, pageIndex }) => {
+export const PivotTableSlide: React.FC<PivotTableSlideProps> = ({
+  data,
+  pageIndex,
+  participantLabel = 'മദ്രസ',
+}) => {
   const contentRef = useRef<HTMLDivElement>(null)
   const [scrollWidth, setScrollWidth] = useState(0)
 
@@ -46,7 +51,7 @@ export const PivotTableSlide: React.FC<PivotTableSlideProps> = ({ data, pageInde
           <div
             className={`${nameColWidth} shrink-0 p-2 font-display font-bold font-malayalam text-2xl uppercase tracking-wider border-r border-red-800 flex items-end pb-2 bg-news-dark z-30 shadow-[4px_0_5px_rgba(0,0,0,0.2)]`}
           >
-            മദ്രസ
+            {participantLabel}
           </div>
 
           {/* Scrolling Headers */}
@@ -79,7 +84,7 @@ export const PivotTableSlide: React.FC<PivotTableSlideProps> = ({ data, pageInde
 
         {/* Body Wrapper */}
         <div className="flex-grow overflow-hidden flex relative">
-          {/* Fixed Left Column (Madrasa Names) */}
+          {/* Fixed Left Column (Participant Names) */}
           <div
             className={`${nameColWidth} shrink-0 bg-white border-r border-slate-300 z-10 shadow-[4px_0_5px_rgba(0,0,0,0.1)]`}
           >
@@ -118,9 +123,7 @@ export const PivotTableSlide: React.FC<PivotTableSlideProps> = ({ data, pageInde
                     <div
                       key={i}
                       className={`${colWidth} shrink-0 flex items-center justify-center text-xl font-mono border-r border-slate-200 ${
-                        v === 10 || v === 5
-                          ? 'bg-green-600 text-white font-bold'
-                          : 'text-slate-700'
+                        v === 10 || v === 5 ? 'bg-green-600 text-white font-bold' : 'text-slate-700'
                       }`}
                     >
                       {v > 0 ? v : <span className="text-gray-200 text-sm">.</span>}
@@ -142,4 +145,3 @@ export const PivotTableSlide: React.FC<PivotTableSlideProps> = ({ data, pageInde
     </div>
   )
 }
-

@@ -45,4 +45,3 @@ export const AdSlide: React.FC<AdSlideProps> = ({ imageUrl }) => {
     </div>
   )
 }
-

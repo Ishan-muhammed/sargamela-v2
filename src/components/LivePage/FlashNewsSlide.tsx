@@ -33,4 +33,3 @@ export const FlashNewsSlide: React.FC<FlashNewsSlideProps> = ({ content }) => {
     </div>
   )
 }
-

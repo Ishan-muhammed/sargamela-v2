@@ -3,4 +3,3 @@
 export const TICKER_NEWS: string[] = []
 
 export const URGENT_FLASH_NEWS = ''
-

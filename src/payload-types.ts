@@ -71,7 +71,7 @@ export interface Config {
     media: Media;
     users: User;
     participants: Participant;
-    eventCategories: EventCategory;
+    competitionCategories: CompetitionCategory;
     competitionItems: CompetitionItem;
     redirects: Redirect;
     forms: Form;
@@ -85,7 +85,7 @@ export interface Config {
     'payload-migrations': PayloadMigration;
   };
   collectionsJoins: {
-    eventCategories: {
+    competitionCategories: {
       'Competition Items': 'competitionItems';
     };
     'payload-folders': {
@@ -97,7 +97,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     participants: ParticipantsSelect<false> | ParticipantsSelect<true>;
-    eventCategories: EventCategoriesSelect<false> | EventCategoriesSelect<true>;
+    competitionCategories: CompetitionCategoriesSelect<false> | CompetitionCategoriesSelect<true>;
     competitionItems: CompetitionItemsSelect<false> | CompetitionItemsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
@@ -118,11 +118,13 @@ export interface Config {
     header: Header;
     footer: Footer;
     settings: Setting;
+    seo: Seo;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     settings: SettingsSelect<false> | SettingsSelect<true>;
+    seo: SeoSelect<false> | SeoSelect<true>;
   };
   locale: null;
   user: User & {
@@ -486,7 +488,7 @@ export interface CompetitionItem {
   /**
    * The category of the competition item
    */
-  category: number | EventCategory;
+  category: number | CompetitionCategory;
   /**
    * The type of the competition item like "Group Item" or "Individual Item"
    */
@@ -518,12 +520,12 @@ export interface CompetitionItem {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "eventCategories".
+ * via the `definition` "competitionCategories".
  */
-export interface EventCategory {
+export interface CompetitionCategory {
   id: number;
   /**
-   * The name of the event category like "Kids", "Children", "Sub Juniors", "Juniors", "Seniors"
+   * The name of the competition category like "Kids", "Children", "Sub Juniors", "Juniors", "Seniors"
    */
   name: string;
   /**
@@ -532,7 +534,7 @@ export interface EventCategory {
   generateSlug?: boolean | null;
   slug: string;
   /**
-   * The order of the event category in the list, 0 is the first
+   * The order of the competition category in the list, 0 is the first
    */
   order: number;
   'Competition Items'?: {
@@ -997,8 +999,8 @@ export interface PayloadLockedDocument {
         value: number | Participant;
       } | null)
     | ({
-        relationTo: 'eventCategories';
-        value: number | EventCategory;
+        relationTo: 'competitionCategories';
+        value: number | CompetitionCategory;
       } | null)
     | ({
         relationTo: 'competitionItems';
@@ -1329,9 +1331,9 @@ export interface ParticipantsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "eventCategories_select".
+ * via the `definition` "competitionCategories_select".
  */
-export interface EventCategoriesSelect<T extends boolean = true> {
+export interface CompetitionCategoriesSelect<T extends boolean = true> {
   name?: T;
   generateSlug?: T;
   slug?: T;
@@ -1691,13 +1693,13 @@ export interface Footer {
 export interface Setting {
   id: number;
   /**
-   * The name of the event displayed throughout the site
+   * The name of the fest displayed throughout the site
    */
-  eventName: string;
+  festName: string;
   /**
-   * A brief description of the event
+   * A brief description of the fest
    */
-  eventDescription?: string | null;
+  festDescription?: string | null;
   /**
    * Customizable labels for participants in both languages
    */
@@ -1724,39 +1726,50 @@ export interface Setting {
     };
   };
   /**
-   * The date of the event
+   * The date of the fest
    */
-  eventDate?: string | null;
+  festDate?: string | null;
   /**
-   * Current status of the event
+   * Current status of the fest
    */
-  eventStatus: 'upcoming' | 'live' | 'completed';
+  festStatus: 'upcoming' | 'live' | 'completed';
   /**
-   * The main logo for the event
+   * The main logo for the fest
    */
-  eventLogo?: (number | null) | Media;
+  festLogo?: (number | null) | Media;
   /**
-   * Banner image for the event
+   * Banner image for the fest
    */
-  eventBanner?: (number | null) | Media;
+  festBanner?: (number | null) | Media;
+  /**
+   * Configure the intro slide that appears at the start of live display
+   */
+  introSlide: {
+    /**
+     * Top label text (shown in red banner)
+     */
+    topLabel: string;
+    /**
+     * First line of main title
+     */
+    titleLine1: string;
+    /**
+     * Second line of main title (shown in gold)
+     */
+    titleLine2: string;
+    /**
+     * Third line of main title (usually year)
+     */
+    titleLine3: string;
+    /**
+     * Text shown at bottom with pulsing indicator
+     */
+    bottomText: string;
+  };
   /**
    * Urgent flash news that will be displayed prominently (leave empty to hide)
    */
-  flashNews?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
+  flashNews?: string | null;
   /**
    * News items that scroll at the bottom of the display
    */
@@ -1770,14 +1783,6 @@ export interface Setting {
    * Advertisement image to display during transitions
    */
   adImageUrl?: (number | null) | Media;
-  /**
-   * Enable automatic rotation of display views
-   */
-  autoRotateEnabled?: boolean | null;
-  /**
-   * Seconds between view rotations (if auto-rotate is enabled)
-   */
-  rotationInterval?: number | null;
   pointsSystem: {
     firstPlace: {
       /**
@@ -1831,21 +1836,6 @@ export interface Setting {
       }[]
     | null;
   /**
-   * Event program schedule
-   */
-  programSchedule?:
-    | {
-        title: string;
-        /**
-         * Time of the program (e.g., "10:00 AM - 11:00 AM")
-         */
-        time: string;
-        description?: string | null;
-        type?: ('stage' | 'offstage' | 'break' | 'other') | null;
-        id?: string | null;
-      }[]
-    | null;
-  /**
    * Downloadable program schedules (PDF, etc.)
    */
   programFiles?:
@@ -1855,6 +1845,83 @@ export interface Setting {
         id?: string | null;
       }[]
     | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "seo".
+ */
+export interface Seo {
+  id: number;
+  /**
+   * The name of your site (used in title tags and meta tags)
+   */
+  siteName: string;
+  /**
+   * A brief description of your site (used in meta description tags)
+   */
+  siteDescription: string;
+  /**
+   * Comma-separated keywords for SEO (optional)
+   */
+  siteKeywords?: string | null;
+  /**
+   * The full URL of your site (e.g., https://sargamela.com)
+   */
+  siteUrl: string;
+  /**
+   * Favicon for the site (32x32 or 16x16 .ico file). This will override the default favicon.
+   */
+  favicon?: (number | null) | Media;
+  /**
+   * SVG version of favicon for modern browsers (optional)
+   */
+  faviconSvg?: (number | null) | Media;
+  /**
+   * Default Open Graph image for social media sharing (recommended: 1200x630px)
+   */
+  ogImage: number | Media;
+  /**
+   * Apple touch icon for iOS devices (recommended: 180x180px)
+   */
+  appleTouchIcon?: (number | null) | Media;
+  /**
+   * Open Graph title (leave empty to use site name). Used when sharing on Facebook, LinkedIn, etc.
+   */
+  ogTitle?: string | null;
+  /**
+   * Open Graph description (leave empty to use site description). Used when sharing on social media.
+   */
+  ogDescription?: string | null;
+  /**
+   * Twitter card type for sharing on X/Twitter
+   */
+  twitterCard?: ('summary_large_image' | 'summary') | null;
+  /**
+   * Twitter/X handle (without @)
+   */
+  twitterHandle?: string | null;
+  /**
+   * Twitter/X site handle (without @)
+   */
+  twitterSite?: string | null;
+  /**
+   * Theme color for mobile browser chrome (hex color code, e.g., #dc2626)
+   */
+  themeColor?: string | null;
+  /**
+   * Control how search engines index your site
+   */
+  robots?: ('index' | 'noindex' | 'follow' | 'nofollow')[] | null;
+  /**
+   * Google Search Console verification code
+   */
+  googleSiteVerification?: string | null;
+  /**
+   * Custom scripts or meta tags to inject in <head> (e.g., analytics, verification tags)
+   */
+  customHeadScripts?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1909,8 +1976,8 @@ export interface FooterSelect<T extends boolean = true> {
  * via the `definition` "settings_select".
  */
 export interface SettingsSelect<T extends boolean = true> {
-  eventName?: T;
-  eventDescription?: T;
+  festName?: T;
+  festDescription?: T;
   participantLabel?:
     | T
     | {
@@ -1927,10 +1994,19 @@ export interface SettingsSelect<T extends boolean = true> {
               ml?: T;
             };
       };
-  eventDate?: T;
-  eventStatus?: T;
-  eventLogo?: T;
-  eventBanner?: T;
+  festDate?: T;
+  festStatus?: T;
+  festLogo?: T;
+  festBanner?: T;
+  introSlide?:
+    | T
+    | {
+        topLabel?: T;
+        titleLine1?: T;
+        titleLine2?: T;
+        titleLine3?: T;
+        bottomText?: T;
+      };
   flashNews?: T;
   tickerNews?:
     | T
@@ -1939,8 +2015,6 @@ export interface SettingsSelect<T extends boolean = true> {
         id?: T;
       };
   adImageUrl?: T;
-  autoRotateEnabled?: T;
-  rotationInterval?: T;
   pointsSystem?:
     | T
     | {
@@ -1974,15 +2048,6 @@ export interface SettingsSelect<T extends boolean = true> {
         url?: T;
         id?: T;
       };
-  programSchedule?:
-    | T
-    | {
-        title?: T;
-        time?: T;
-        description?: T;
-        type?: T;
-        id?: T;
-      };
   programFiles?:
     | T
     | {
@@ -1990,6 +2055,32 @@ export interface SettingsSelect<T extends boolean = true> {
         file?: T;
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "seo_select".
+ */
+export interface SeoSelect<T extends boolean = true> {
+  siteName?: T;
+  siteDescription?: T;
+  siteKeywords?: T;
+  siteUrl?: T;
+  favicon?: T;
+  faviconSvg?: T;
+  ogImage?: T;
+  appleTouchIcon?: T;
+  ogTitle?: T;
+  ogDescription?: T;
+  twitterCard?: T;
+  twitterHandle?: T;
+  twitterSite?: T;
+  themeColor?: T;
+  robots?: T;
+  googleSiteVerification?: T;
+  customHeadScripts?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

@@ -3,19 +3,22 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { Radio, Megaphone } from 'lucide-react'
-import RichText from '@/components/RichText'
-import type { DefaultTypedEditorState } from '@payloadcms/richtext-lexical'
+import RichText from '../RichText'
+import { Setting } from '@/payload-types'
 
 interface MobileNewsProps {
-  flashNews?: DefaultTypedEditorState | null
-  scrollNews?: string[]
+  flashNews?: Setting['flashNews']
+  scrollNews?: Setting['tickerNews']
 }
 
 export const MobileNews: React.FC<MobileNewsProps> = ({ flashNews, scrollNews }) => {
+  // Handle both old richText format and new plain text
+  const flashNewsText = typeof flashNews === 'string' ? flashNews : ''
+
   return (
     <div className="w-full px-4 py-6 space-y-4">
       {/* Flash News */}
-      {flashNews && (
+      {flashNewsText && flashNewsText.trim().length > 0 && (
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -28,9 +31,9 @@ export const MobileNews: React.FC<MobileNewsProps> = ({ flashNews, scrollNews })
                 Flash News
               </span>
             </div>
-            <div className="text-white text-lg font-malayalam leading-relaxed prose prose-invert max-w-none">
-              <RichText data={flashNews} enableGutter={false} enableProse={false} />
-            </div>
+            <p className="text-white text-lg font-malayalam leading-relaxed whitespace-pre-wrap">
+              {flashNewsText}
+            </p>
           </div>
         </motion.div>
       )}
@@ -58,7 +61,7 @@ export const MobileNews: React.FC<MobileNewsProps> = ({ flashNews, scrollNews })
                 className="flex items-start gap-3"
               >
                 <div className="w-2 h-2 bg-news-red rounded-full mt-2 flex-shrink-0"></div>
-                <p className="text-news-black font-bold text-base flex-1">{news}</p>
+                <p className="text-news-black font-bold text-base flex-1">{news.text}</p>
               </motion.div>
             ))}
           </div>

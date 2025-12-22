@@ -1,3 +1,3 @@
 export * from './Participants'
-export * from './EventCategories'
+export * from './CompetitionCategories'
 export * from './CompetitionItems'

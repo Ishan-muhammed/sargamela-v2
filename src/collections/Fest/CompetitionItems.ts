@@ -45,7 +45,7 @@ export const CompetitionItems: CollectionConfig<'competitionItems'> = {
     {
       name: 'category',
       type: 'relationship',
-      relationTo: 'eventCategories',
+      relationTo: 'competitionCategories',
       required: true,
       admin: {
         description: 'The category of the competition item',

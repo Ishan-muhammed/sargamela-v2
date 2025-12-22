@@ -3,7 +3,7 @@ import { payloadcmsJsonImporter } from 'payloadcms-json-importer'
 export const jsonImporter = payloadcmsJsonImporter({
   collections: {
     participants: true,
-    eventCategories: true,
+    competitionCategories: true,
     competitionItems: true,
   },
 })

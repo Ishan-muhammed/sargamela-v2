@@ -6,6 +6,7 @@ import { formBuilder } from './plugin-form-builder'
 import nestedDocs from './plugin-nested-docs'
 import seo from './plugin-seo'
 import jsonImporter from './plugin-json-importer'
+import realTime from './plugin-real-time'
 
 export const plugins: Plugin[] = [
   redirects,
@@ -15,4 +16,5 @@ export const plugins: Plugin[] = [
   // search,
   importExport,
   jsonImporter,
+  // realTime,
 ]

@@ -4,16 +4,15 @@ import path from 'path'
 import { buildConfig, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
 
-import { Media } from './collections/Media'
-import { Pages } from './collections/Pages'
 import { Users } from './collections/Users'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
-import { Settings } from './globals'
+import { Settings, SEO } from './globals'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
-import { Participants, EventCategories, CompetitionItems } from './collections/Fest'
+import { collections } from './collections'
+import endpoints from './endpoints'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -62,9 +61,9 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URL || '',
     },
   }),
-  collections: [Pages, Media, Users, Participants, EventCategories, CompetitionItems],
+  collections: collections,
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer, Settings],
+  globals: [Header, Footer, Settings, SEO],
   plugins,
   secret: process.env.PAYLOAD_SECRET,
   sharp,
@@ -86,4 +85,5 @@ export default buildConfig({
     },
     tasks: [],
   },
+  endpoints: endpoints,
 })

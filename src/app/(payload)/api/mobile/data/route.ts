@@ -54,15 +54,15 @@ export async function GET() {
     })
 
     // Get all event categories for mapping
-    const { docs: eventCategories } = await payload.find({
-      collection: 'eventCategories',
+    const { docs: competitionCategories } = await payload.find({
+      collection: 'competitionCategories',
       limit: 100,
       depth: 0,
     })
 
     // Create a map of category slug to ID
     const categorySlugToId = new Map<string, number>()
-    eventCategories.forEach((cat) => {
+    competitionCategories.forEach((cat) => {
       categorySlugToId.set(cat.slug, cat.id)
     })
 
@@ -214,7 +214,7 @@ export async function GET() {
       general: {
         flashNews: settings.flashNews || null,
         scrollNews: [],
-        programStatus: settings.eventStatus || 'completed',
+        programStatus: settings.festStatus || 'completed',
         adImageUrl:
           typeof settings.adImageUrl === 'object' && settings.adImageUrl?.url
             ? settings.adImageUrl.url

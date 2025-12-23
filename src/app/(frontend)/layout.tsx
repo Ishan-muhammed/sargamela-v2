@@ -86,9 +86,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 export async function generateMetadata(): Promise<Metadata> {
   const seo = await getSEOData()
 
-  const ogImage = seo.ogImage
-    ? getMediaUrl((seo.ogImage as MediaType).url)
-    : `${getServerSideURL()}/website-template-OG.webp`
+  // Get OG image URL - prefer the og-optimized size
+  let ogImage = `${getServerSideURL()}/website-template-OG.webp`
+  if (seo.ogImage && typeof seo.ogImage === 'object') {
+    const ogImageObj = seo.ogImage as MediaType
+    // Use the og-optimized size if available, otherwise use the original
+    const imageUrl = ogImageObj.sizes?.og?.url || ogImageObj.url
+    ogImage = getMediaUrl(imageUrl)
+  }
 
   return {
     metadataBase: new URL(seo.siteUrl || getServerSideURL()),

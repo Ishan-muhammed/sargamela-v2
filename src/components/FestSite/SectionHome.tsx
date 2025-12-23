@@ -51,14 +51,25 @@ const SectionHome = ({ settings, participants, categories }: SectionHomeProps) =
               />
             )}
 
-            <motion.img
-              initial={{ x: 20, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ delay: 0.2 }}
-              src="/media/KNM Logo.png"
-              alt="KNM Education Board"
-              className="w-16 h-16 object-contain"
-            />
+            {settings.organizationLogo ? (
+              <motion.img
+                initial={{ x: 20, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ delay: 0.2 }}
+                src={getMediaUrl((settings.organizationLogo as MediaType).url)}
+                alt={(settings.organizationLogo as MediaType).alt || 'Organization Logo'}
+                className="w-16 h-16 object-contain"
+              />
+            ) : (
+              <motion.img
+                initial={{ x: 20, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ delay: 0.2 }}
+                src="/media/KNM Logo.png"
+                alt="KNM Education Board"
+                className="w-16 h-16 object-contain"
+              />
+            )}
           </div>
 
           {/* Sargamela Art or Title Lines */}

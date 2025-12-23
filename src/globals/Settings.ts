@@ -141,6 +141,14 @@ export const Settings: GlobalConfig = {
               },
             },
             {
+              name: 'organizationLogo',
+              type: 'upload',
+              relationTo: 'media',
+              admin: {
+                description: 'Organization logo (e.g., KNM Education Board)',
+              },
+            },
+            {
               name: 'festBanner',
               type: 'upload',
               relationTo: 'media',

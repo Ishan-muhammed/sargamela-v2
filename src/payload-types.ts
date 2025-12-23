@@ -1738,6 +1738,10 @@ export interface Setting {
    */
   festLogo?: (number | null) | Media;
   /**
+   * Organization logo (e.g., KNM Education Board)
+   */
+  organizationLogo?: (number | null) | Media;
+  /**
    * Banner image for the fest
    */
   festBanner?: (number | null) | Media;
@@ -1997,6 +2001,7 @@ export interface SettingsSelect<T extends boolean = true> {
   festDate?: T;
   festStatus?: T;
   festLogo?: T;
+  organizationLogo?: T;
   festBanner?: T;
   introSlide?:
     | T

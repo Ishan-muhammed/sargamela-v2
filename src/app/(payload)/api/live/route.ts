@@ -59,9 +59,9 @@ export async function GET() {
 
     // Calculate points for each participant
     const scoreboardData = participants.map((participant) => {
-      let firstPlaceCount = { group: 0, individual: 0, total: 0 }
-      let secondPlaceCount = { group: 0, individual: 0, total: 0 }
-      let thirdPlaceCount = { group: 0, individual: 0, total: 0 }
+      const firstPlaceCount = { group: 0, individual: 0, total: 0 }
+      const secondPlaceCount = { group: 0, individual: 0, total: 0 }
+      const thirdPlaceCount = { group: 0, individual: 0, total: 0 }
       let totalPoints = 0
 
       competitionItems.forEach((item) => {
@@ -125,10 +125,10 @@ export async function GET() {
       scoreboard: scoreboardData,
       flashNews: settings.flashNews || null,
       tickerNews,
-      eventStatus: settings.eventStatus || 'upcoming',
-      eventName: settings.eventName || 'Madrasa Arts Fest',
-      autoRotateEnabled: settings.autoRotateEnabled !== false,
-      rotationInterval: settings.rotationInterval || 10,
+      eventStatus: settings.festStatus || 'upcoming',
+      eventName: settings.festName || 'Madrasa Arts Fest',
+      autoRotateEnabled: false,
+      rotationInterval: 10,
       pointsSystem: {
         firstPlace: firstPlacePoints,
         secondPlace: secondPlacePoints,

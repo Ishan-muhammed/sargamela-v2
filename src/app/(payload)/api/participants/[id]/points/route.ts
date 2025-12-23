@@ -15,10 +15,10 @@ import config from '@payload-config'
  * - third: Number of 3rd place wins
  * - breakdown: Detailed breakdown by item type
  */
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const payload = await getPayload({ config })
-    const participantId = params.id
+    const { id: participantId } = await params
 
     // Convert to number for comparison (if it's a numeric ID)
     const participantIdNum = parseInt(participantId, 10)
@@ -58,9 +58,9 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     })
 
     // Calculate points by position and type
-    let firstPlaceCount = { group: 0, individual: 0, total: 0 }
-    let secondPlaceCount = { group: 0, individual: 0, total: 0 }
-    let thirdPlaceCount = { group: 0, individual: 0, total: 0 }
+    const firstPlaceCount = { group: 0, individual: 0, total: 0 }
+    const secondPlaceCount = { group: 0, individual: 0, total: 0 }
+    const thirdPlaceCount = { group: 0, individual: 0, total: 0 }
     let totalPoints = 0
 
     competitionItems.forEach((item) => {

@@ -1,5 +1,6 @@
 'use client'
 
+import { Link } from '@payloadcms/ui'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Home, Trophy, Table, Radio, Tv } from 'lucide-react'
 
@@ -100,7 +101,7 @@ const MobileMenuOverlay = ({
             </div>
 
             {/* Big Screen Display Link */}
-            <a href="/live" onClick={() => setMobileMenuOpen(false)} className="block">
+            <Link href="/live" onClick={() => setMobileMenuOpen(false)} className="block">
               <button className="w-full bg-gradient-to-r from-news-red to-news-dark text-white px-4 py-3 rounded-lg font-display font-bold text-sm flex items-center justify-between gap-3 shadow-lg hover:shadow-xl transition-all">
                 <div className="flex items-center gap-3">
                   <Tv className="w-5 h-5" />
@@ -108,7 +109,7 @@ const MobileMenuOverlay = ({
                 </div>
                 <span className="text-xs opacity-80">For Venue</span>
               </button>
-            </a>
+            </Link>
           </div>
         </motion.div>
       )}

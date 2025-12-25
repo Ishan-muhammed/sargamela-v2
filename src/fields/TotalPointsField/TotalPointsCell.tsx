@@ -1,7 +1,7 @@
 import React from 'react'
 import { getPayload } from 'payload'
 import config from '@payload-config'
-import { calculateParticipantPoints } from '@/utilities/calculateParticipantPoints'
+import { getParticipantTotalPoints } from '@/utilities/calculatePoints'
 import './cell-styles.scss'
 
 interface TotalPointsCellProps {
@@ -30,7 +30,7 @@ export const TotalPointsCell: React.FC<TotalPointsCellProps> = async ({ rowData 
   const payload = await getPayload({ config })
 
   // Calculate points server-side
-  const totalPoints = await calculateParticipantPoints(payload, rowData.id)
+  const totalPoints = await getParticipantTotalPoints(payload, rowData.id)
 
   return (
     <div className="total-points-cell">

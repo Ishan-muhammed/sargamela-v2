@@ -8,9 +8,14 @@ import { ChevronRight } from 'lucide-react'
 interface MobilePivotTableProps {
   data: PivotTableData
   index: number
+  participantLabel?: string
 }
 
-export const MobilePivotTable: React.FC<MobilePivotTableProps> = ({ data, index }) => {
+export const MobilePivotTable: React.FC<MobilePivotTableProps> = ({
+  data,
+  index,
+  participantLabel = 'മദ്രസ',
+}) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -36,7 +41,7 @@ export const MobilePivotTable: React.FC<MobilePivotTableProps> = ({ data, index 
             <thead className="bg-news-dark text-white">
               <tr>
                 <th className="sticky left-0 z-10 bg-news-dark px-3 py-3 text-left font-malayalam font-bold text-sm border-r border-red-800 shadow-[2px_0_5px_rgba(0,0,0,0.2)]">
-                  മദ്രസ
+                  {participantLabel}
                 </th>
                 {data.headers.map((header, idx) => (
                   <th

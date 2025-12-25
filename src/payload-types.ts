@@ -115,14 +115,10 @@ export interface Config {
   };
   fallbackLocale: null;
   globals: {
-    header: Header;
-    footer: Footer;
     settings: Setting;
     seo: Seo;
   };
   globalsSelect: {
-    header: HeaderSelect<false> | HeaderSelect<true>;
-    footer: FooterSelect<false> | FooterSelect<true>;
     settings: SettingsSelect<false> | SettingsSelect<true>;
     seo: SeoSelect<false> | SeoSelect<true>;
   };
@@ -515,6 +511,20 @@ export interface CompetitionItem {
      */
     Third?: (number | null) | Participant;
   };
+  /**
+   * Assign grades to participants who did not win positions
+   */
+  grade: {
+    /**
+     * The participant who received this grade
+     */
+    participant: number | Participant;
+    /**
+     * Select the grade to award
+     */
+    grade: string;
+    id?: string | null;
+  }[];
   updatedAt: string;
   createdAt: string;
 }
@@ -1359,6 +1369,13 @@ export interface CompetitionItemsSelect<T extends boolean = true> {
         Second?: T;
         Third?: T;
       };
+  grade?:
+    | T
+    | {
+        participant?: T;
+        grade?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1640,54 +1657,6 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "header".
- */
-export interface Header {
-  id: number;
-  navItems?:
-    | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?: {
-            relationTo: 'pages';
-            value: number | Page;
-          } | null;
-          url?: string | null;
-          label: string;
-        };
-        id?: string | null;
-      }[]
-    | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "footer".
- */
-export interface Footer {
-  id: number;
-  navItems?:
-    | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?: {
-            relationTo: 'pages';
-            value: number | Page;
-          } | null;
-          url?: string | null;
-          label: string;
-        };
-        id?: string | null;
-      }[]
-    | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "settings".
  */
 export interface Setting {
@@ -1706,7 +1675,7 @@ export interface Setting {
   participantLabel: {
     singular: {
       /**
-       * Singular form in English (e.g., "Madrasa", "Mandalam", "District")
+       * Singular form in English (e.g., "Madrasa", "Zone", "District")
        */
       en: string;
       /**
@@ -1716,7 +1685,7 @@ export interface Setting {
     };
     plural: {
       /**
-       * Plural form in English (e.g., "Madrasas", "Mandalams", "Districts")
+       * Plural form in English (e.g., "Madrasas", "Zones", "Districts")
        */
       en: string;
       /**
@@ -1816,6 +1785,30 @@ export interface Setting {
       individualItem: number;
     };
   };
+  /**
+   * Grade-based scoring system (A, B, C grades). Participants who don't win positions can receive grades with points.
+   */
+  gradeSystem?:
+    | {
+        /**
+         * Key of the grade (e.g., a, b, c, a-plus, etc.), this will be used to identify the grade in the results
+         */
+        key: string;
+        /**
+         * Grade label (e.g., A, B, C, A+, etc.)
+         */
+        grade: string;
+        /**
+         * Points awarded for this grade in group items
+         */
+        groupPoints: number;
+        /**
+         * Points awarded for this grade in individual items
+         */
+        individualPoints: number;
+        id?: string | null;
+      }[]
+    | null;
   /**
    * Display points on the public scoreboard
    */
@@ -1931,52 +1924,6 @@ export interface Seo {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "header_select".
- */
-export interface HeaderSelect<T extends boolean = true> {
-  navItems?:
-    | T
-    | {
-        link?:
-          | T
-          | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
-            };
-        id?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "footer_select".
- */
-export interface FooterSelect<T extends boolean = true> {
-  navItems?:
-    | T
-    | {
-        link?:
-          | T
-          | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
-            };
-        id?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "settings_select".
  */
 export interface SettingsSelect<T extends boolean = true> {
@@ -2041,6 +1988,15 @@ export interface SettingsSelect<T extends boolean = true> {
               groupItem?: T;
               individualItem?: T;
             };
+      };
+  gradeSystem?:
+    | T
+    | {
+        key?: T;
+        grade?: T;
+        groupPoints?: T;
+        individualPoints?: T;
+        id?: T;
       };
   showPointsOnScoreboard?: T;
   organizerName?: T;

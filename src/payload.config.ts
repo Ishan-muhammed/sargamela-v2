@@ -5,8 +5,6 @@ import { buildConfig, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
 
 import { Users } from './collections/Users'
-import { Footer } from './Footer/config'
-import { Header } from './Header/config'
 import { Settings, SEO } from './globals'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
@@ -63,7 +61,7 @@ export default buildConfig({
   }),
   collections: collections,
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer, Settings, SEO],
+  globals: [Settings, SEO],
   plugins,
   secret: process.env.PAYLOAD_SECRET,
   sharp,

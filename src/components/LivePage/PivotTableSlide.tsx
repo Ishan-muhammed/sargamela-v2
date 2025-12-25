@@ -49,7 +49,7 @@ export const PivotTableSlide: React.FC<PivotTableSlideProps> = ({
         <div className="flex border-b-2 border-news-dark bg-news-dark text-white shrink-0 z-20">
           {/* Fixed Top-Left Header */}
           <div
-            className={`${nameColWidth} shrink-0 p-2 font-display font-bold font-malayalam text-2xl uppercase tracking-wider border-r border-red-800 flex items-end pb-2 bg-news-dark z-30 shadow-[4px_0_5px_rgba(0,0,0,0.2)]`}
+            className={`${nameColWidth} shrink-0 p-2 font-malayalam font-bold text-2xl uppercase tracking-wider border-r border-red-800 flex items-end pb-2 bg-news-dark z-30 shadow-[4px_0_5px_rgba(0,0,0,0.2)]`}
           >
             {participantLabel}
           </div>
@@ -70,7 +70,7 @@ export const PivotTableSlide: React.FC<PivotTableSlideProps> = ({
                   key={i}
                   className={`${colWidth} shrink-0 pb-1 font-anek-malayalam text-sm font-bold uppercase tracking-tight border-r border-red-800 text-center flex items-end justify-center`}
                 >
-                  <div className="rotate-180 [writing-mode:vertical-rl] text-left w-full h-full flex items-center px-0.5 break-words whitespace-pre-line">
+                  <div className="rotate-180 [writing-mode:vertical-rl] text-left w-full h-full flex items-center px-0.5 break-words whitespace-pre-line font-anek-malayalam">
                     {h}
                   </div>
                 </div>

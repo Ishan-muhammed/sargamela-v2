@@ -1,5 +1,6 @@
 import { authenticated } from '@/access/authenticated'
 import { authenticatedOrPublished } from '@/access/authenticatedOrPublished'
+import { GradesField } from '@/fields/GradesField'
 import type { CollectionConfig } from 'payload'
 
 export const CompetitionItems: CollectionConfig<'competitionItems'> = {
@@ -94,7 +95,7 @@ export const CompetitionItems: CollectionConfig<'competitionItems'> = {
       label: false, // Hide default label since our custom component has its own
       admin: {
         components: {
-          Field: '/components/Fields/ResultsField/ResultsField#ResultsField',
+          Field: '/fields/ResultsField/ResultsField#ResultsField',
         },
       },
       fields: [
@@ -130,6 +131,7 @@ export const CompetitionItems: CollectionConfig<'competitionItems'> = {
         },
       ],
     },
+    GradesField,
   ],
 }
 

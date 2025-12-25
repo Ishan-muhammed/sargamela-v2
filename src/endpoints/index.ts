@@ -50,6 +50,14 @@ const getScoreboardData = async (payload: Payload) => {
     individual: pointsSystem.thirdPlace?.individualItem || 1,
   }
 
+  // Get grade system from settings (it's an array)
+  const gradesConfig = (settings.gradeSystem || []).map((gradeItem: any) => ({
+    key: gradeItem.key,
+    label: gradeItem.grade,
+    groupPoints: gradeItem.groupPoints || 0,
+    individualPoints: gradeItem.individualPoints || 0,
+  }))
+
   // Get all active participants
   const { docs: participants } = await payload.find({
     collection: 'participants',
@@ -75,45 +83,107 @@ const getScoreboardData = async (payload: Payload) => {
     const firstPlaceCount = { group: 0, individual: 0, total: 0 }
     const secondPlaceCount = { group: 0, individual: 0, total: 0 }
     const thirdPlaceCount = { group: 0, individual: 0, total: 0 }
-    let totalPoints = 0
+
+    // Grade tracking - dynamically initialize based on gradesConfig
+    const gradeTracking: Record<string, { group: number; individual: number }> = {}
+    gradesConfig.forEach((gradeConfig) => {
+      gradeTracking[gradeConfig.key] = { group: 0, individual: 0 }
+    })
+
+    let totalPositionPoints = 0
+    let totalGradePoints = 0
 
     competitionItems.forEach((item) => {
       const results = item.results as any
       const itemType = item.type // 'group' or 'individual'
+      const isGroup = itemType === 'group'
 
+      // Position-based points
       if (results?.First == participant.id) {
         firstPlaceCount.total++
-        if (itemType === 'group') {
+        if (isGroup) {
           firstPlaceCount.group++
-          totalPoints += firstPlacePoints.group
+          totalPositionPoints += firstPlacePoints.group
         } else {
           firstPlaceCount.individual++
-          totalPoints += firstPlacePoints.individual
+          totalPositionPoints += firstPlacePoints.individual
         }
       }
 
       if (results?.Second == participant.id) {
         secondPlaceCount.total++
-        if (itemType === 'group') {
+        if (isGroup) {
           secondPlaceCount.group++
-          totalPoints += secondPlacePoints.group
+          totalPositionPoints += secondPlacePoints.group
         } else {
           secondPlaceCount.individual++
-          totalPoints += secondPlacePoints.individual
+          totalPositionPoints += secondPlacePoints.individual
         }
       }
 
       if (results?.Third == participant.id) {
         thirdPlaceCount.total++
-        if (itemType === 'group') {
+        if (isGroup) {
           thirdPlaceCount.group++
-          totalPoints += thirdPlacePoints.group
+          totalPositionPoints += thirdPlacePoints.group
         } else {
           thirdPlaceCount.individual++
-          totalPoints += thirdPlacePoints.individual
+          totalPositionPoints += thirdPlacePoints.individual
         }
       }
+
+      // Grade-based points (grade field is at item level, not in results)
+      const grades = (item as any).grade as any
+      if (grades && Array.isArray(grades)) {
+        grades.forEach((gradeEntry: any) => {
+          if (gradeEntry.participant == participant.id) {
+            const gradeKey = gradeEntry.grade
+            if (gradeKey && gradeTracking[gradeKey] !== undefined) {
+              if (isGroup) {
+                gradeTracking[gradeKey].group++
+              } else {
+                gradeTracking[gradeKey].individual++
+              }
+
+              // Add points
+              const gradeConfig = gradesConfig.find((g) => g.key === gradeKey)
+              if (gradeConfig) {
+                totalGradePoints += isGroup ? gradeConfig.groupPoints : gradeConfig.individualPoints
+              }
+            }
+          }
+        })
+      }
     })
+
+    // Build grade breakdown array
+    const gradeBreakdown = gradesConfig
+      .map((gradeConfig) => {
+        const tracking = gradeTracking[gradeConfig.key]
+        const count = tracking.group + tracking.individual
+
+        if (count === 0) return null
+
+        return {
+          grade: gradeConfig.key,
+          gradeLabel: gradeConfig.label,
+          count,
+          byType: {
+            group: tracking.group,
+            individual: tracking.individual,
+          },
+          points: {
+            group: tracking.group * gradeConfig.groupPoints,
+            individual: tracking.individual * gradeConfig.individualPoints,
+            total:
+              tracking.group * gradeConfig.groupPoints +
+              tracking.individual * gradeConfig.individualPoints,
+          },
+        }
+      })
+      .filter(Boolean) as any[]
+
+    const totalPoints = totalPositionPoints + totalGradePoints
 
     return {
       ...participant,
@@ -125,6 +195,8 @@ const getScoreboardData = async (payload: Payload) => {
         firstByType: { group: firstPlaceCount.group, individual: firstPlaceCount.individual },
         secondByType: { group: secondPlaceCount.group, individual: secondPlaceCount.individual },
         thirdByType: { group: thirdPlaceCount.group, individual: thirdPlaceCount.individual },
+        grades: gradeBreakdown,
+        totalGradePoints,
       },
     }
   })
@@ -138,6 +210,7 @@ const getScoreboardData = async (payload: Payload) => {
       firstPlace: firstPlacePoints,
       secondPlace: secondPlacePoints,
       thirdPlace: thirdPlacePoints,
+      grades: gradesConfig,
     },
     lastUpdated: new Date().toISOString(),
   }
@@ -164,6 +237,14 @@ const getDetailedScoreboardData = async (payload: Payload): Promise<PivotTableDa
     group: pointsSystem.thirdPlace?.groupItem || 1,
     individual: pointsSystem.thirdPlace?.individualItem || 1,
   }
+
+  // Get grade system from settings (it's an array)
+  const gradesConfig = (settings.gradeSystem || []).map((gradeItem: any) => ({
+    key: gradeItem.key,
+    label: gradeItem.grade,
+    groupPoints: gradeItem.groupPoints || 0,
+    individualPoints: gradeItem.individualPoints || 0,
+  }))
 
   // Get all competition categories sorted by order
   const { docs: categories } = await payload.find({
@@ -221,12 +302,33 @@ const getDetailedScoreboardData = async (payload: Payload): Promise<PivotTableDa
         const secondId = typeof results?.Second === 'object' ? results?.Second?.id : results?.Second
         const thirdId = typeof results?.Third === 'object' ? results?.Third?.id : results?.Third
 
+        // Calculate position points
         if (firstId == participant.id) {
           itemPoints = itemType === 'group' ? firstPlacePoints.group : firstPlacePoints.individual
         } else if (secondId == participant.id) {
           itemPoints = itemType === 'group' ? secondPlacePoints.group : secondPlacePoints.individual
         } else if (thirdId == participant.id) {
           itemPoints = itemType === 'group' ? thirdPlacePoints.group : thirdPlacePoints.individual
+        }
+
+        // Calculate grade points
+        const grades = (item as any).grade
+        if (Array.isArray(grades)) {
+          grades.forEach((gradeEntry: any) => {
+            const gradeParticipantId =
+              typeof gradeEntry.participant === 'object'
+                ? gradeEntry.participant?.id
+                : gradeEntry.participant
+
+            if (gradeParticipantId == participant.id) {
+              const gradeKey = gradeEntry.grade
+              const gradeConfig = gradesConfig.find((g) => g.key === gradeKey)
+              if (gradeConfig) {
+                itemPoints +=
+                  itemType === 'group' ? gradeConfig.groupPoints : gradeConfig.individualPoints
+              }
+            }
+          })
         }
 
         values.push(itemPoints)

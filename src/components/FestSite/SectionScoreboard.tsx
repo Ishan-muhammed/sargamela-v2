@@ -2,13 +2,14 @@
 
 import { motion } from 'framer-motion'
 import { MobileScoreboard } from './MobileScoreboard'
-import { Participant } from '@/app/(frontend)/types'
+import { Participant, PointsSystem } from '@/app/(frontend)/types'
 
 interface SectionScoreboardProps {
   participants: Participant[]
+  pointsSystem?: PointsSystem
 }
 
-const SectionScoreboard = ({ participants }: SectionScoreboardProps) => {
+const SectionScoreboard = ({ participants, pointsSystem }: SectionScoreboardProps) => {
   return (
     <motion.div
       key="scoreboard"
@@ -16,7 +17,7 @@ const SectionScoreboard = ({ participants }: SectionScoreboardProps) => {
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -20 }}
     >
-      <MobileScoreboard participants={participants} />
+      <MobileScoreboard participants={participants} pointsSystem={pointsSystem} />
     </motion.div>
   )
 }

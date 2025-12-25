@@ -61,7 +61,9 @@ export const MobileNews: React.FC<MobileNewsProps> = ({ flashNews, scrollNews })
                 className="flex items-start gap-3"
               >
                 <div className="w-2 h-2 bg-news-red rounded-full mt-2 flex-shrink-0"></div>
-                <p className="text-news-black font-bold text-base flex-1">{news.text}</p>
+                <p className="text-news-black font-malayalam font-bold text-base flex-1">
+                  {news.text}
+                </p>
               </motion.div>
             ))}
           </div>

@@ -20,12 +20,17 @@ export interface Participant {
  * Detailed breakdown of participant's performance
  */
 export interface ParticipantBreakdown {
+  // Position-based breakdown (legacy support)
   first: number
   second: number
   third: number
   firstByType: PlacementByType
   secondByType: PlacementByType
   thirdByType: PlacementByType
+
+  // Grade-based breakdown
+  grades?: GradeBreakdownEntry[]
+  totalGradePoints?: number
 }
 
 /**
@@ -34,6 +39,21 @@ export interface ParticipantBreakdown {
 export interface PlacementByType {
   group: number
   individual: number
+}
+
+/**
+ * Grade breakdown entry
+ */
+export interface GradeBreakdownEntry {
+  grade: string // Grade key (a, b, c)
+  gradeLabel: string // Display label (Grade A, Grade B, etc.)
+  count: number
+  byType: PlacementByType
+  points: {
+    group: number
+    individual: number
+    total: number
+  }
 }
 
 /**
@@ -89,6 +109,7 @@ export interface PointsSystem {
   firstPlace: PlacementPoints
   secondPlace: PlacementPoints
   thirdPlace: PlacementPoints
+  grades?: GradePointsConfig[]
 }
 
 /**
@@ -97,4 +118,14 @@ export interface PointsSystem {
 export interface PlacementPoints {
   group: number
   individual: number
+}
+
+/**
+ * Grade points configuration
+ */
+export interface GradePointsConfig {
+  key: string
+  label: string
+  groupPoints: number
+  individualPoints: number
 }

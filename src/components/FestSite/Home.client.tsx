@@ -189,10 +189,17 @@ export default function HomeClient({ initialSettings }: HomeClientProps) {
             )}
 
             {/* Scoreboard Section */}
-            {activeSection === 'scoreboard' && <SectionScoreboard participants={participants} />}
+            {activeSection === 'scoreboard' && (
+              <SectionScoreboard
+                participants={participants}
+                pointsSystem={festData?.pointsSystem}
+              />
+            )}
 
             {/* Categories Section */}
-            {activeSection === 'categories' && <SectionCategories categories={categories} />}
+            {activeSection === 'categories' && (
+              <SectionCategories categories={categories} settings={settings} />
+            )}
 
             {/* News Section */}
             {activeSection === 'news' && <SectionNews settings={settings} />}

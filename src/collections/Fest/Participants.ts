@@ -53,8 +53,8 @@ export const Participants: CollectionConfig<'participants'> = {
       type: 'ui',
       admin: {
         components: {
-          Field: '/components/Fields/TotalPointsField/TotalPointsField#TotalPointsField',
-          Cell: '/components/Fields/TotalPointsField/TotalPointsCell#TotalPointsCell',
+          Field: '/fields/TotalPointsField/TotalPointsField#TotalPointsField',
+          Cell: '/fields/TotalPointsField/TotalPointsCell#TotalPointsCell',
         },
       },
     },

@@ -2,11 +2,17 @@
 
 import { motion } from 'framer-motion'
 import { MobilePivotTable } from './MobilePivotTable'
+import { Setting } from '@/payload-types'
 
 interface SectionCategoriesProps {
   categories: any[]
+  settings?: Setting
 }
-const SectionCategories = ({ categories }: SectionCategoriesProps) => {
+const SectionCategories = ({ categories, settings }: SectionCategoriesProps) => {
+  // Get participant label from settings (singular form in Malayalam)
+  const participantLabel =
+    settings?.participantLabel?.singular?.ml || settings?.participantLabel?.singular?.en || 'മദ്രസ'
+
   return (
     <motion.div
       key="categories"
@@ -16,7 +22,12 @@ const SectionCategories = ({ categories }: SectionCategoriesProps) => {
       className="space-y-6"
     >
       {categories.map((category, index) => (
-        <MobilePivotTable key={category.name} data={category.data!} index={index} />
+        <MobilePivotTable
+          key={category.name}
+          data={category.data!}
+          index={index}
+          participantLabel={participantLabel}
+        />
       ))}
     </motion.div>
   )

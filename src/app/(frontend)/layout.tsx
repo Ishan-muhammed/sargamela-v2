@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { cn } from '@/utilities/ui'
 import { GeistMono } from 'geist/font/mono'
 import { GeistSans } from 'geist/font/sans'
+import { Anek_Malayalam, Noto_Sans_Malayalam, Oswald, Roboto_Condensed } from 'next/font/google'
 import React from 'react'
 
 import { AdminBar } from '@/components/AdminBar'
@@ -18,6 +19,33 @@ import { getPayload } from 'payload'
 import { getMediaUrl } from '@/utilities/getMediaUrl'
 import type { Media as MediaType } from '@/payload-types'
 
+// Configure Google Fonts
+const oswald = Oswald({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '700'],
+  variable: '--font-oswald',
+  display: 'swap',
+})
+
+const robotoCondensed = Roboto_Condensed({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  variable: '--font-roboto-condensed',
+  display: 'swap',
+})
+
+const anekMalayalam = Anek_Malayalam({
+  subsets: ['latin', 'malayalam'],
+  variable: '--font-anek-malayalam',
+  display: 'swap',
+})
+
+const notoSansMalayalam = Noto_Sans_Malayalam({
+  subsets: ['latin', 'malayalam'],
+  variable: '--font-noto-sans-malayalam',
+  display: 'swap',
+})
+
 async function getSEOData() {
   const payload = await getPayload({ config: configPromise })
   const seo = await payload.findGlobal({
@@ -32,7 +60,18 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const seo = await getSEOData()
 
   return (
-    <html className={cn(GeistSans.variable, GeistMono.variable)} lang="en" suppressHydrationWarning>
+    <html
+      className={cn(
+        GeistSans.variable,
+        GeistMono.variable,
+        oswald.variable,
+        robotoCondensed.variable,
+        anekMalayalam.variable,
+        notoSansMalayalam.variable,
+      )}
+      lang="en"
+      suppressHydrationWarning
+    >
       <head>
         <InitTheme />
         {/* Favicon */}

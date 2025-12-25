@@ -55,9 +55,9 @@ const LivePage: React.FC = () => {
   // Construct the sequence of views dynamically from fetched data
   // 0: Intro
   // 1: Scoreboard
-  // 2-6: Tables (Kids, Children, Sub Juniors, Juniors, Seniors)
-  // 7: Flash News (Conditional)
-  // 8: Ad (Conditional)
+  // 2+: Tables (dynamic based on categories)
+  // N: Flash News (Conditional)
+  // N+1: Ad (Conditional)
   const views = useMemo(() => {
     const sequence: Array<{
       type: string
@@ -72,24 +72,16 @@ const LivePage: React.FC = () => {
 
     sequence.push({ type: 'SCOREBOARD' })
 
-    // Add category tables if data is available
-    const categories = [
-      categoriesData.kids,
-      categoriesData.children,
-      categoriesData.subJuniors,
-      categoriesData.juniors,
-      categoriesData.seniors,
-    ]
-
-    categories.forEach((category, index) => {
-      if (category.data) {
+    // Add category tables dynamically from API data
+    if (categoriesData.categories && categoriesData.categories.length > 0) {
+      categoriesData.categories.forEach((category, index) => {
         sequence.push({
           type: 'TABLE',
-          data: category.data,
+          data: category,
           index: index + 1,
         })
-      }
-    })
+      })
+    }
 
     // Add Ad slide at the end if there's an ad image
     if (adImageUrl && adImageUrl.length > 0) {
@@ -97,15 +89,7 @@ const LivePage: React.FC = () => {
     }
 
     return sequence
-  }, [
-    flashNewsContent,
-    adImageUrl,
-    categoriesData.kids.data,
-    categoriesData.children.data,
-    categoriesData.subJuniors.data,
-    categoriesData.juniors.data,
-    categoriesData.seniors.data,
-  ])
+  }, [flashNewsContent, adImageUrl, categoriesData.categories])
 
   // Reset viewIndex if it's out of bounds (e.g., Flash News removed)
   useEffect(() => {
@@ -145,11 +129,7 @@ const LivePage: React.FC = () => {
   // Log data when it's fetched (for debugging)
   useEffect(() => {
     if (!categoriesData.isLoading && !categoriesData.isError) {
-      console.log('Formatted Kids Data:', categoriesData.kids.data)
-      console.log('Formatted Children Data:', categoriesData.children.data)
-      console.log('Formatted Sub Juniors Data:', categoriesData.subJuniors.data)
-      console.log('Formatted Juniors Data:', categoriesData.juniors.data)
-      console.log('Formatted Seniors Data:', categoriesData.seniors.data)
+      console.log('Categories Data:', categoriesData.categories)
     }
 
     // Debug scroll news
@@ -160,16 +140,7 @@ const LivePage: React.FC = () => {
         programStatus: generalData.programStatus,
       })
     }
-  }, [
-    categoriesData.isLoading,
-    categoriesData.isError,
-    categoriesData.kids.data,
-    categoriesData.children.data,
-    categoriesData.subJuniors.data,
-    categoriesData.juniors.data,
-    categoriesData.seniors.data,
-    generalData,
-  ])
+  }, [categoriesData.isLoading, categoriesData.isError, categoriesData.categories, generalData])
 
   const currentView = views[viewIndex]
 

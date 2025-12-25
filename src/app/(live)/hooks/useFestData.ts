@@ -184,23 +184,15 @@ export const useGeneralData = (refetchInterval?: number) => {
 }
 
 /**
- * Hook to get all category pivot tables
+ * Hook to get all category pivot tables (dynamic)
  */
 export const useAllCategoriesData = (refetchInterval?: number) => {
   const { data, isLoading, error } = useFullFestData(refetchInterval)
 
   const pivotTables = transformToPivotTables(data?.detailedScoreboardData)
 
-  // Map categories by name (assuming order: Kids, Children, Sub Juniors, Juniors, Seniors)
-  const getCategoryByName = (name: string) =>
-    pivotTables.find((table) => table.title.toLowerCase().includes(name.toLowerCase()))
-
   return {
-    kids: { data: getCategoryByName('kids'), isLoading, error },
-    children: { data: getCategoryByName('children'), isLoading, error },
-    subJuniors: { data: getCategoryByName('sub junior'), isLoading, error },
-    juniors: { data: getCategoryByName('junior'), isLoading, error },
-    seniors: { data: getCategoryByName('senior'), isLoading, error },
+    categories: pivotTables,
     isLoading,
     isError: !!error,
   }

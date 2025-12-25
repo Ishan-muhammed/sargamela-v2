@@ -41,63 +41,79 @@ export const Settings: GlobalConfig = {
             {
               name: 'participantLabel',
               type: 'group',
+              admin: {
+                description: 'Customizable labels for participants in both languages',
+              },
               fields: [
                 {
                   name: 'singular',
                   type: 'group',
+                  label: 'Singular Form',
                   fields: [
                     {
-                      name: 'en',
-                      type: 'text',
-                      required: true,
-                      defaultValue: 'Madrasa',
-                      admin: {
-                        description:
-                          'Singular form in English (e.g., "Madrasa", "Mandalam", "District")',
-                      },
-                    },
-                    {
-                      name: 'ml',
-                      type: 'text',
-                      required: true,
-                      defaultValue: 'മദ്രസ',
-                      admin: {
-                        description:
-                          'Singular form in Malayalam (e.g., "മദ്രസ", "മണ്ഡലം", "ജില്ല")',
-                      },
+                      type: 'row',
+                      fields: [
+                        {
+                          name: 'en',
+                          type: 'text',
+                          required: true,
+                          defaultValue: 'Madrasa',
+                          admin: {
+                            description:
+                              'Singular form in English (e.g., "Madrasa", "Zone", "District")',
+                            width: '50%',
+                          },
+                        },
+                        {
+                          name: 'ml',
+                          type: 'text',
+                          required: true,
+                          defaultValue: 'മദ്രസ',
+                          admin: {
+                            description:
+                              'Singular form in Malayalam (e.g., "മദ്രസ", "മണ്ഡലം", "ജില്ല")',
+                            width: '50%',
+                          },
+                        },
+                      ],
                     },
                   ],
                 },
                 {
                   name: 'plural',
                   type: 'group',
+                  label: 'Plural Form',
                   fields: [
                     {
-                      name: 'en',
-                      type: 'text',
-                      required: true,
-                      defaultValue: 'Madrasas',
-                      admin: {
-                        description:
-                          'Plural form in English (e.g., "Madrasas", "Mandalams", "Districts")',
-                      },
-                    },
-                    {
-                      name: 'ml',
-                      type: 'text',
-                      required: true,
-                      defaultValue: 'മദ്രസകൾ',
-                      admin: {
-                        description:
-                          'Plural form in Malayalam (e.g., "മദ്രസകൾ", "മണ്ഡലങ്ങൾ", "ജില്ലകൾ")',
-                      },
+                      type: 'row',
+                      fields: [
+                        {
+                          name: 'en',
+                          type: 'text',
+                          required: true,
+                          defaultValue: 'Madrasas',
+                          admin: {
+                            description:
+                              'Plural form in English (e.g., "Madrasas", "Zones", "Districts")',
+                            width: '50%',
+                          },
+                        },
+                        {
+                          name: 'ml',
+                          type: 'text',
+                          required: true,
+                          defaultValue: 'മദ്രസകൾ',
+                          admin: {
+                            description:
+                              'Plural form in Malayalam (e.g., "മദ്രസകൾ", "മണ്ഡലങ്ങൾ", "ജില്ലകൾ")',
+                            width: '50%',
+                          },
+                        },
+                      ],
                     },
                   ],
                 },
               ],
-              admin: {
-                description: 'Customizable labels for participants in both languages',
-              },
             },
             {
               name: 'festDate',
@@ -256,7 +272,7 @@ export const Settings: GlobalConfig = {
               label: false,
               admin: {
                 components: {
-                  Field: '/components/Fields/PointsSystemField/PointsSystemField#PointsSystemField',
+                  Field: '/fields/PointsSystemField/PointsSystemField#PointsSystemField',
                 },
               },
               fields: [
@@ -325,6 +341,71 @@ export const Settings: GlobalConfig = {
                       defaultValue: 1,
                       admin: {
                         description: 'Points awarded for 3rd place individual item',
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              name: 'gradeSystem',
+              type: 'array',
+              admin: {
+                description:
+                  "Grade-based scoring system (A, B, C grades). Participants who don't win positions can receive grades with points.",
+                initCollapsed: false,
+              },
+              defaultValue: [
+                { key: 'a', grade: 'A', groupPoints: 3, individualPoints: 2 },
+                { key: 'b', grade: 'B', groupPoints: 2, individualPoints: 1 },
+                { key: 'c', grade: 'C', groupPoints: 1, individualPoints: 1 },
+              ],
+              fields: [
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'key',
+                      type: 'text',
+                      required: true,
+                      admin: {
+                        description:
+                          'Key of the grade (e.g., a, b, c, a-plus, etc.), this will be used to identify the grade in the results',
+                        width: '50%',
+                      },
+                    },
+                    {
+                      name: 'grade',
+                      type: 'text',
+                      required: true,
+                      admin: {
+                        description: 'Grade label (e.g., A, B, C, A+, etc.)',
+                        width: '50%',
+                      },
+                    },
+                  ],
+                },
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'groupPoints',
+                      type: 'number',
+                      required: true,
+                      defaultValue: 1,
+                      admin: {
+                        description: 'Points awarded for this grade in group items',
+                        width: '50%',
+                      },
+                    },
+                    {
+                      name: 'individualPoints',
+                      type: 'number',
+                      required: true,
+                      defaultValue: 1,
+                      admin: {
+                        description: 'Points awarded for this grade in individual items',
+                        width: '50%',
                       },
                     },
                   ],

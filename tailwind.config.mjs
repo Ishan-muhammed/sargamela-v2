@@ -104,9 +104,17 @@ const config = {
       fontFamily: {
         mono: ['var(--font-geist-mono)'],
         sans: ['var(--font-geist-sans)'],
-        malayalam: ['system-ui', 'sans-serif'],
-        'anek-malayalam': ['system-ui', 'sans-serif'],
-        display: ['var(--font-geist-sans)'],
+        oswald: ['var(--font-oswald)', 'sans-serif'],
+        'roboto-condensed': ['var(--font-roboto-condensed)', 'sans-serif'],
+        malayalam: [
+          'var(--font-anek-malayalam)',
+          'var(--font-noto-sans-malayalam)',
+          'system-ui',
+          'sans-serif',
+        ],
+        'anek-malayalam': ['var(--font-anek-malayalam)', 'system-ui', 'sans-serif'],
+        'noto-sans-malayalam': ['var(--font-noto-sans-malayalam)', 'system-ui', 'sans-serif'],
+        display: ['var(--font-oswald)', 'var(--font-geist-sans)', 'sans-serif'],
       },
       keyframes: {
         'accordion-down': {

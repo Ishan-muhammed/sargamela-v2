@@ -2,19 +2,21 @@
 
 import React from 'react'
 import { motion } from 'framer-motion'
-import { PivotTableData } from '../../app/(frontend)/types'
+import { PivotTableData, PointsSystem } from '../../app/(frontend)/types'
 import { ChevronRight } from 'lucide-react'
 
 interface MobilePivotTableProps {
   data: PivotTableData
   index: number
   participantLabel?: string
+  pointsSystem?: PointsSystem
 }
 
 export const MobilePivotTable: React.FC<MobilePivotTableProps> = ({
   data,
   index,
   participantLabel = 'മദ്രസ',
+  pointsSystem,
 }) => {
   return (
     <motion.div
@@ -73,7 +75,8 @@ export const MobilePivotTable: React.FC<MobilePivotTableProps> = ({
                     <td
                       key={valIdx}
                       className={`px-2 py-2 text-center font-mono border-r border-slate-200 ${
-                        value === 10 || value === 5
+                        value === pointsSystem?.firstPlace.group ||
+                        value === pointsSystem?.firstPlace.individual
                           ? 'bg-green-600 text-white font-bold text-base'
                           : 'text-slate-700 text-sm'
                       }`}

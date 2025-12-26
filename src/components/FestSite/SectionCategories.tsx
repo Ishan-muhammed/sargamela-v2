@@ -3,12 +3,14 @@
 import { motion } from 'framer-motion'
 import { MobilePivotTable } from './MobilePivotTable'
 import { Setting } from '@/payload-types'
+import { PointsSystem } from '@/types/common'
 
 interface SectionCategoriesProps {
   categories: any[]
   settings?: Setting
+  pointsSystem?: PointsSystem
 }
-const SectionCategories = ({ categories, settings }: SectionCategoriesProps) => {
+const SectionCategories = ({ categories, settings, pointsSystem }: SectionCategoriesProps) => {
   // Get participant label from settings (singular form in Malayalam)
   const participantLabel =
     settings?.participantLabel?.singular?.ml || settings?.participantLabel?.singular?.en || 'മദ്രസ'
@@ -27,6 +29,7 @@ const SectionCategories = ({ categories, settings }: SectionCategoriesProps) => 
           data={category.data!}
           index={index}
           participantLabel={participantLabel}
+          pointsSystem={pointsSystem}
         />
       ))}
     </motion.div>

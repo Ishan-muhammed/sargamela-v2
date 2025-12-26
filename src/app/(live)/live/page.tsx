@@ -1,6 +1,7 @@
 'use client'
 
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo, Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { Layout } from '../../../components/LivePage/Layout'
 import { IntroSlide } from '../../../components/LivePage/IntroSlide'
 import { ScoreboardSlide } from '../../../components/LivePage/ScoreboardSlide'
@@ -27,7 +28,10 @@ const DURATIONS = {
   AD: 8000, // 8 seconds for advertisement
 }
 
-const LivePage: React.FC = () => {
+const LivePageContent: React.FC = () => {
+  const searchParams = useSearchParams()
+  const slideParam = searchParams.get('slide')
+
   const [viewIndex, setViewIndex] = useState(0)
   const queryClient = useQueryClient()
 
@@ -46,7 +50,6 @@ const LivePage: React.FC = () => {
     typeof generalData?.flashNews === 'string'
       ? generalData.flashNews.trim() || URGENT_FLASH_NEWS
       : URGENT_FLASH_NEWS
-  const programStatus = generalData?.programStatus || 'Completed'
   const adImageUrl = generalData?.adImageUrl || ''
   const scrollNews = generalData?.scrollNews || []
   const introSlide = generalData?.introSlide
@@ -98,7 +101,22 @@ const LivePage: React.FC = () => {
     }
   }, [views.length, viewIndex])
 
+  // Handle slide query parameter to jump to specific slide
   useEffect(() => {
+    if (slideParam && views.length > 0) {
+      const slideIndex = parseInt(slideParam, 10)
+      if (!isNaN(slideIndex) && slideIndex >= 0 && slideIndex < views.length) {
+        setViewIndex(slideIndex)
+      }
+    }
+  }, [slideParam, views.length])
+
+  useEffect(() => {
+    // Don't auto-advance if slide query parameter is present
+    if (slideParam) {
+      return
+    }
+
     const currentViewConfig = views[viewIndex]
 
     let duration = 1000
@@ -122,7 +140,7 @@ const LivePage: React.FC = () => {
     return () => {
       clearTimeout(timer)
     }
-  }, [viewIndex, views, queryClient])
+  }, [viewIndex, views, queryClient, slideParam])
 
   // No longer needed - scores update automatically via TanStack Query refetch
 
@@ -145,7 +163,7 @@ const LivePage: React.FC = () => {
   const currentView = views[viewIndex]
 
   return (
-    <Layout scrollNews={scrollNews} programStatus={programStatus}>
+    <Layout scrollNews={scrollNews}>
       <AnimatePresence mode="wait">
         <motion.div
           key={viewIndex}
@@ -164,6 +182,7 @@ const LivePage: React.FC = () => {
               data={currentView.data}
               pageIndex={currentView.index ?? 0}
               participantLabel={participantLabel}
+              pointsSystem={generalData?.pointsSystem}
             />
           )}
           {currentView.type === 'FLASH' && <FlashNewsSlide content={flashNewsContent} />}
@@ -171,6 +190,16 @@ const LivePage: React.FC = () => {
         </motion.div>
       </AnimatePresence>
     </Layout>
+  )
+}
+
+const LivePage: React.FC = () => {
+  return (
+    <Suspense
+      fallback={<div className="flex items-center justify-center h-screen">Loading...</div>}
+    >
+      <LivePageContent />
+    </Suspense>
   )
 }
 

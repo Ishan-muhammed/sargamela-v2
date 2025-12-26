@@ -6,14 +6,9 @@ import { TICKER_NEWS } from '../../app/(live)/constants'
 interface LayoutProps {
   children: React.ReactNode
   scrollNews?: string[]
-  programStatus?: 'Live' | 'Upcoming' | 'Completed'
 }
 
-export const Layout: React.FC<LayoutProps> = ({
-  children,
-  scrollNews,
-  programStatus = 'Completed',
-}) => {
+export const Layout: React.FC<LayoutProps> = ({ children, scrollNews }) => {
   // Keep track of the last valid scroll news to avoid showing empty ticker
   const lastValidScrollNews = useRef<string[]>([])
 
@@ -52,7 +47,7 @@ export const Layout: React.FC<LayoutProps> = ({
           Breaking News
         </div>
         <div className="flex-grow overflow-hidden relative h-full flex items-center">
-          <div className="animate-marquee whitespace-nowrap flex items-center">
+          <div className="animate-marquee whitespace-nowrap flex items-center font-malayalam">
             {displayNews.map((news, i) => (
               <span key={i} className="mx-8 text-2xl font-bold uppercase tracking-tight">
                 <span className="text-news-red mr-2">●</span> {news}

@@ -3,17 +3,20 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { PivotTableData } from '@/app/(frontend)/types'
+import { PointsSystem } from '@/types/common'
 
 interface PivotTableSlideProps {
   data: PivotTableData
   pageIndex: number
   participantLabel?: string
+  pointsSystem?: PointsSystem
 }
 
 export const PivotTableSlide: React.FC<PivotTableSlideProps> = ({
   data,
   pageIndex,
   participantLabel = 'മദ്രസ',
+  pointsSystem,
 }) => {
   const contentRef = useRef<HTMLDivElement>(null)
   const [scrollWidth, setScrollWidth] = useState(0)
@@ -49,7 +52,7 @@ export const PivotTableSlide: React.FC<PivotTableSlideProps> = ({
         <div className="flex border-b-2 border-news-dark bg-news-dark text-white shrink-0 z-20">
           {/* Fixed Top-Left Header */}
           <div
-            className={`${nameColWidth} shrink-0 p-2 font-malayalam font-bold text-2xl uppercase tracking-wider border-r border-red-800 flex items-end pb-2 bg-news-dark z-30 shadow-[4px_0_5px_rgba(0,0,0,0.2)]`}
+            className={`${nameColWidth} shrink-0 p-2 font-malayalam font-bold text-2xl uppercase tracking-wider border-r border-red-800 flex items-center bg-news-dark z-30 shadow-[4px_0_5px_rgba(0,0,0,0.2)]`}
           >
             {participantLabel}
           </div>
@@ -68,14 +71,14 @@ export const PivotTableSlide: React.FC<PivotTableSlideProps> = ({
               {data.headers.map((h, i) => (
                 <div
                   key={i}
-                  className={`${colWidth} shrink-0 pb-1 font-anek-malayalam text-sm font-bold uppercase tracking-tight border-r border-red-800 text-center flex items-end justify-center`}
+                  className={`${colWidth} shrink-0 pb-1 font-anek-malayalam text-sm font-bold uppercase tracking-tight border-r border-red-800 text-center flex items-end justify-center max-h-full overflow-hidden`}
                 >
-                  <div className="rotate-180 [writing-mode:vertical-rl] text-left w-full h-full flex items-center px-0.5 break-words whitespace-pre-line font-anek-malayalam">
+                  <div className="rotate-180 [writing-mode:vertical-rl] text-left w-full max-h-full flex items-center px-0.5 break-all font-anek-malayalam overflow-hidden">
                     {h}
                   </div>
                 </div>
               ))}
-              <div className="w-24 shrink-0 p-2 font-display text-lg uppercase tracking-wider bg-news-red text-center flex items-center justify-center">
+              <div className="w-24 shrink-0 p-2 font-display text-lg uppercase tracking-wider bg-news-red text-center flex items-center justify-center h-48">
                 Total
               </div>
             </motion.div>
@@ -122,14 +125,17 @@ export const PivotTableSlide: React.FC<PivotTableSlideProps> = ({
                   {row.values.map((v, i) => (
                     <div
                       key={i}
-                      className={`${colWidth} shrink-0 flex items-center justify-center text-xl font-mono border-r border-slate-200 ${
-                        v === 10 || v === 5 ? 'bg-green-600 text-white font-bold' : 'text-slate-700'
+                      className={`${colWidth} shrink-0 flex items-center justify-center text-sm font-mono border-r border-slate-200 ${
+                        v === pointsSystem?.firstPlace.group ||
+                        v === pointsSystem?.firstPlace.individual
+                          ? 'bg-green-600 text-white font-bold'
+                          : 'text-slate-700'
                       }`}
                     >
                       {v > 0 ? v : <span className="text-gray-200 text-sm">.</span>}
                     </div>
                   ))}
-                  <div className="w-24 shrink-0 flex items-center justify-center text-2xl font-bold bg-red-50 text-news-red font-mono border-l border-slate-300">
+                  <div className="w-24 shrink-0 flex items-center justify-center text-2xl font-bold bg-red-50 text-news-red border-l border-slate-300 font-mono">
                     {row.total}
                   </div>
                 </div>

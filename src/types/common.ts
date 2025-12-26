@@ -84,6 +84,7 @@ export interface GeneralData {
   adImageUrl: string
   introSlide?: IntroSlideData
   participantLabel?: string
+  pointsSystem?: PointsSystem
 }
 
 /**

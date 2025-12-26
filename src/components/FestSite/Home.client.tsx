@@ -198,7 +198,11 @@ export default function HomeClient({ initialSettings }: HomeClientProps) {
 
             {/* Categories Section */}
             {activeSection === 'categories' && (
-              <SectionCategories categories={categories} settings={settings} />
+              <SectionCategories
+                categories={categories}
+                settings={settings}
+                pointsSystem={festData?.pointsSystem}
+              />
             )}
 
             {/* News Section */}

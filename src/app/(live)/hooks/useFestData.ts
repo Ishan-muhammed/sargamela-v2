@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import type { FullDetailsResponse, ApiParticipantWithScore } from '@/types/api'
-import type { Participant, PivotTableData, GeneralData } from '@/types/common'
+import type { Participant, PivotTableData, GeneralData, PointsSystem } from '@/types/common'
 
 // Query keys
 export const festQueryKeys = {
@@ -66,7 +66,10 @@ export const transformToPivotTables = (data: PivotTableData[] | undefined): Pivo
 /**
  * Transform settings to GeneralData format
  */
-export const transformToGeneralData = (settings: any | undefined): GeneralData => {
+export const transformToGeneralData = (
+  settings: any | undefined,
+  pointsSystem?: PointsSystem,
+): GeneralData => {
   if (!settings) {
     return {
       flashNews: '',
@@ -81,6 +84,7 @@ export const transformToGeneralData = (settings: any | undefined): GeneralData =
         bottomText: 'Live Updates',
       },
       participantLabel: 'മദ്രസ',
+      pointsSystem,
     }
   }
 
@@ -154,6 +158,7 @@ export const transformToGeneralData = (settings: any | undefined): GeneralData =
     adImageUrl: adImageUrl,
     introSlide,
     participantLabel,
+    pointsSystem,
   }
 }
 
@@ -171,13 +176,13 @@ export const useScoreboardParticipants = (refetchInterval?: number) => {
 }
 
 /**
- * Hook to get general data (flash news, scroll news, status, ad)
+ * Hook to get general data (flash news, scroll news, status, ad, points system)
  */
 export const useGeneralData = (refetchInterval?: number) => {
   const { data, isLoading, error } = useFullFestData(refetchInterval)
 
   return {
-    data: transformToGeneralData(data?.settings),
+    data: transformToGeneralData(data?.settings, data?.pointsSystem),
     isLoading,
     error,
   }

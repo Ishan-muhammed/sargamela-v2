@@ -1,6 +1,8 @@
 'use client'
 
 import { Providers } from '@/providers'
+import { GeistMono } from 'geist/font/mono'
+import { GeistSans } from 'geist/font/sans'
 import { Anek_Malayalam, Noto_Sans_Malayalam, Oswald, Roboto_Condensed } from 'next/font/google'
 import { cn } from '@/utilities/ui'
 import '../(frontend)/globals.css'
@@ -39,6 +41,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       data-theme="light"
       suppressHydrationWarning
       className={cn(
+        GeistSans.variable,
+        GeistMono.variable,
         oswald.variable,
         robotoCondensed.variable,
         anekMalayalam.variable,

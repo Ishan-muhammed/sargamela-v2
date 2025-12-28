@@ -1,5 +1,6 @@
 import { authenticated } from '@/access/authenticated'
 import { authenticatedOrPublished } from '@/access/authenticatedOrPublished'
+import { revalidateFest } from '@/hooks/revalidateFest'
 import type { CollectionConfig } from 'payload'
 
 export const Participants: CollectionConfig<'participants'> = {
@@ -21,6 +22,10 @@ export const Participants: CollectionConfig<'participants'> = {
     active: true,
   },
   timestamps: true,
+  hooks: {
+    afterChange: [revalidateFest],
+    afterDelete: [revalidateFest],
+  },
   fields: [
     {
       name: 'name',

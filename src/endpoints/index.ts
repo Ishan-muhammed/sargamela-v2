@@ -1,5 +1,7 @@
 import { Participant } from '@/payload-types'
 import { Endpoint, Payload } from 'payload'
+import { unstable_cache } from 'next/cache'
+
 
 type LeaderboardParticipant = Participant & {
   score: number
@@ -215,6 +217,13 @@ const getScoreboardData = async (payload: Payload) => {
     lastUpdated: new Date().toISOString(),
   }
 }
+// Wrapped version for caching
+export const getScoreboardDataCached = unstable_cache(
+  async (payload: Payload) => getScoreboardData(payload),
+  ['fest-scoreboard'],
+  { tags: ['fest-data'], revalidate: 60 },
+)
+
 
 const getDetailedScoreboardData = async (payload: Payload): Promise<PivotTableData[]> => {
   // Get settings for point system
@@ -354,6 +363,13 @@ const getDetailedScoreboardData = async (payload: Payload): Promise<PivotTableDa
 
   return pivotTables
 }
+// Wrapped version for caching
+export const getDetailedScoreboardDataCached = unstable_cache(
+  async (payload: Payload) => getDetailedScoreboardData(payload),
+  ['fest-detailed-scoreboard'],
+  { tags: ['fest-data'], revalidate: 60 },
+)
+
 
 /**
  * Get full data with settings, participants, and competition items
@@ -386,27 +402,34 @@ const getFullData = async (payload: Payload) => {
     detailedScoreboardData,
   }
 }
+// Wrapped version for caching
+export const getFullDataCached = unstable_cache(
+  async (payload: Payload) => getFullData(payload),
+  ['fest-full-data'],
+  { tags: ['fest-data'], revalidate: 60 },
+)
+
 
 const endpoints: Endpoint[] = [
   {
     path: '/fest/detailed',
     method: 'get',
     handler: async (req) => {
-      return Response.json(await getFullData(req.payload))
+      return Response.json(await getFullDataCached(req.payload))
     },
   },
   {
     path: '/fest/scoreboard',
     method: 'get',
     handler: async (req) => {
-      return Response.json(await getScoreboardData(req.payload))
+      return Response.json(await getScoreboardDataCached(req.payload))
     },
   },
   {
     path: '/fest/detailed-scoreboard',
     method: 'get',
     handler: async (req) => {
-      return Response.json(await getDetailedScoreboardData(req.payload))
+      return Response.json(await getDetailedScoreboardDataCached(req.payload))
     },
   },
 ]

@@ -1,6 +1,7 @@
 import { authenticated } from '@/access/authenticated'
 import { authenticatedOrPublished } from '@/access/authenticatedOrPublished'
 import { GradesField } from '@/fields/GradesField'
+import { revalidateFest } from '@/hooks/revalidateFest'
 import type { CollectionConfig } from 'payload'
 
 export const CompetitionItems: CollectionConfig<'competitionItems'> = {
@@ -35,6 +36,10 @@ export const CompetitionItems: CollectionConfig<'competitionItems'> = {
     active: true,
   },
   timestamps: true,
+  hooks: {
+    afterChange: [revalidateFest],
+    afterDelete: [revalidateFest],
+  },
   fields: [
     {
       name: 'title',

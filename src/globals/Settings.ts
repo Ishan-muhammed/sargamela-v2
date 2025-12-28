@@ -8,6 +8,8 @@ import {
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
 import hooks from './hooks'
+import { revalidateFest } from '@/hooks/revalidateFest'
+
 
 export const Settings: GlobalConfig = {
   slug: 'settings',
@@ -499,7 +501,10 @@ export const Settings: GlobalConfig = {
       ],
     },
   ],
-  hooks: hooks,
+  hooks: {
+    ...hooks,
+    afterChange: [revalidateFest],
+  },
 }
 
 export default Settings

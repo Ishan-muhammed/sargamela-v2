@@ -6,6 +6,7 @@ import type { CollectionConfig } from 'payload'
 export const CompetitionItems: CollectionConfig<'competitionItems'> = {
   slug: 'competitionItems',
   admin: {
+    useAsTitle: 'title',
     defaultColumns: [
       'title',
       'category',

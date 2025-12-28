@@ -308,13 +308,13 @@ export const Settings: GlobalConfig = {
                       name: 'groupItem',
                       type: 'number',
                       required: true,
-                      defaultValue: 5,
+                      defaultValue: 6,
                     },
                     {
                       name: 'individualItem',
                       type: 'number',
                       required: true,
-                      defaultValue: 2,
+                      defaultValue: 3,
                       admin: {
                         description: 'Points awarded for 2nd place individual item',
                       },
@@ -329,7 +329,7 @@ export const Settings: GlobalConfig = {
                       name: 'groupItem',
                       type: 'number',
                       required: true,
-                      defaultValue: 1,
+                      defaultValue: 2,
                       admin: {
                         description: 'Points awarded for 3rd place group item',
                       },
@@ -356,8 +356,8 @@ export const Settings: GlobalConfig = {
                 initCollapsed: false,
               },
               defaultValue: [
-                { key: 'a', grade: 'A', groupPoints: 3, individualPoints: 2 },
-                { key: 'b', grade: 'B', groupPoints: 2, individualPoints: 1 },
+                { key: 'a', grade: 'A', groupPoints: 5, individualPoints: 5 },
+                { key: 'b', grade: 'B', groupPoints: 3, individualPoints: 3 },
                 { key: 'c', grade: 'C', groupPoints: 1, individualPoints: 1 },
               ],
               fields: [

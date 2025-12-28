@@ -188,7 +188,7 @@ export const Settings: GlobalConfig = {
                   name: 'topLabel',
                   type: 'text',
                   required: true,
-                  defaultValue: 'ഫറോക്ക് മണ്ഡലം',
+                  defaultValue: 'കോഴിക്കോട് നോർത്ത് ജില്ലാ',
                   admin: {
                     description: 'Top label text (shown in red banner)',
                   },

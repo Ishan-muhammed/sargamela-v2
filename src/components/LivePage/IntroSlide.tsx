@@ -12,7 +12,7 @@ interface IntroSlideProps {
 }
 
 export const IntroSlide: React.FC<IntroSlideProps> = ({
-  topLabel = 'ഫറോക്ക് മണ്ഡലം',
+  topLabel = 'കോഴിക്കോട് നോർത്ത് ജില്ലാ',
   titleLine1 = 'മദ്രസ',
   titleLine2 = 'സർഗ്ഗമേള',
   titleLine3 = '2025',

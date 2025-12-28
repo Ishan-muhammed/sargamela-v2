@@ -77,7 +77,7 @@ export const transformToGeneralData = (
       programStatus: 'Completed',
       adImageUrl: '',
       introSlide: {
-        topLabel: 'ഫറോക്ക് മണ്ഡലം',
+        topLabel: 'കോഴിക്കോട് നോർത്ത് ജില്ലാ',
         titleLine1: 'മദ്രസ',
         titleLine2: 'സർഗ്ഗമേള',
         titleLine3: '2025',
@@ -134,14 +134,14 @@ export const transformToGeneralData = (
   // Extract intro slide data
   const introSlide = settings.introSlide
     ? {
-        topLabel: settings.introSlide.topLabel || 'ഫറോക്ക് മണ്ഡലം',
+        topLabel: settings.introSlide.topLabel || 'കോഴിക്കോട് നോർത്ത് ജില്ലാ',
         titleLine1: settings.introSlide.titleLine1 || 'മദ്രസ',
         titleLine2: settings.introSlide.titleLine2 || 'സർഗ്ഗമേള',
         titleLine3: settings.introSlide.titleLine3 || '2025',
         bottomText: settings.introSlide.bottomText || 'Live Updates',
       }
     : {
-        topLabel: 'ഫറോക്ക് മണ്ഡലം',
+        topLabel: 'കോഴിക്കോട് നോർത്ത് ജില്ലാ',
         titleLine1: 'മദ്രസ',
         titleLine2: 'സർഗ്ഗമേള',
         titleLine3: '2025',

@@ -1,6 +1,7 @@
 import { Participant } from '@/payload-types'
-import { Endpoint, Payload } from 'payload'
+import { Endpoint, Payload, getPayload } from 'payload'
 import { unstable_cache } from 'next/cache'
+import configPromise from '@payload-config'
 
 
 type LeaderboardParticipant = Participant & {
@@ -219,7 +220,10 @@ const getScoreboardData = async (payload: Payload) => {
 }
 // Wrapped version for caching
 export const getScoreboardDataCached = unstable_cache(
-  async (payload: Payload) => getScoreboardData(payload),
+  async () => {
+    const payload = await getPayload({ config: configPromise })
+    return getScoreboardData(payload)
+  },
   ['fest-scoreboard'],
   { tags: ['fest-data'], revalidate: 60 },
 )
@@ -365,7 +369,10 @@ const getDetailedScoreboardData = async (payload: Payload): Promise<PivotTableDa
 }
 // Wrapped version for caching
 export const getDetailedScoreboardDataCached = unstable_cache(
-  async (payload: Payload) => getDetailedScoreboardData(payload),
+  async () => {
+    const payload = await getPayload({ config: configPromise })
+    return getDetailedScoreboardData(payload)
+  },
   ['fest-detailed-scoreboard'],
   { tags: ['fest-data'], revalidate: 60 },
 )
@@ -403,8 +410,12 @@ const getFullData = async (payload: Payload) => {
   }
 }
 // Wrapped version for caching
+// Wrapped version for caching
 export const getFullDataCached = unstable_cache(
-  async (payload: Payload) => getFullData(payload),
+  async () => {
+    const payload = await getPayload({ config: configPromise })
+    return getFullData(payload)
+  },
   ['fest-full-data'],
   { tags: ['fest-data'], revalidate: 60 },
 )
@@ -414,22 +425,22 @@ const endpoints: Endpoint[] = [
   {
     path: '/fest/detailed',
     method: 'get',
-    handler: async (req) => {
-      return Response.json(await getFullDataCached(req.payload))
+    handler: async () => {
+      return Response.json(await getFullDataCached())
     },
   },
   {
     path: '/fest/scoreboard',
     method: 'get',
-    handler: async (req) => {
-      return Response.json(await getScoreboardDataCached(req.payload))
+    handler: async () => {
+      return Response.json(await getScoreboardDataCached())
     },
   },
   {
     path: '/fest/detailed-scoreboard',
     method: 'get',
-    handler: async (req) => {
-      return Response.json(await getDetailedScoreboardDataCached(req.payload))
+    handler: async () => {
+      return Response.json(await getDetailedScoreboardDataCached())
     },
   },
 ]

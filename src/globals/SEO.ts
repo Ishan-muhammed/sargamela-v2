@@ -19,7 +19,7 @@ export const SEO: GlobalConfig = {
               name: 'siteName',
               type: 'text',
               required: true,
-              defaultValue: 'Sargamela 2025',
+              defaultValue: 'അറബിക് അധ്യാപക സംഗമം 2026',
               admin: {
                 description: 'The name of your site (used in title tags and meta tags)',
               },
@@ -28,7 +28,8 @@ export const SEO: GlobalConfig = {
               name: 'siteDescription',
               type: 'textarea',
               required: true,
-              defaultValue: 'Live scoring and updates for Sargamela 2025',
+              defaultValue:
+                'സംസ്ഥാന അറബിക് അധ്യാപക സംഗമവും കലാസാഹിത്യ മത്സരങ്ങളും 2026 - തത്സമയ സ്കോറുകളും അപ്ഡേറ്റുകളും',
               admin: {
                 description: 'A brief description of your site (used in meta description tags)',
               },
@@ -38,7 +39,8 @@ export const SEO: GlobalConfig = {
               type: 'textarea',
               admin: {
                 description: 'Comma-separated keywords for SEO (optional)',
-                placeholder: 'sargamela, madrasa, competition, live scores',
+                placeholder:
+                  'arabic teachers meet, അറബിക് അധ്യാപക സംഗമം, കലാസാഹിത്യ മത്സരങ്ങൾ, kerala education, live scores',
               },
             },
             {

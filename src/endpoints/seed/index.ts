@@ -1,4 +1,7 @@
 import type { CollectionSlug, GlobalSlug, Payload, PayloadRequest, File } from 'payload'
+import path from 'path'
+import { readFile } from 'fs/promises'
+import { fileURLToPath } from 'url'
 
 import { contactForm as contactFormData } from './contact-form'
 import { contact as contactPageData } from './contact-page'
@@ -63,9 +66,7 @@ export const seed = async ({
     fetchFileByURL(
       'https://raw.githubusercontent.com/payloadcms/payload/refs/heads/main/templates/website/src/endpoints/seed/image-post3.webp',
     ),
-    fetchFileByURL(
-      'https://raw.githubusercontent.com/payloadcms/payload/refs/heads/main/templates/website/src/endpoints/seed/image-hero1.webp',
-    ),
+    getLocalFile(path.join(process.cwd(), 'public/arabic-teachers-meet-2026.png'), 'image/png'),
   ])
 
   const [demoAuthor, image1Doc, image2Doc, image3Doc, imageHomeDoc] = await Promise.all([
@@ -114,11 +115,13 @@ export const seed = async ({
       collection: 'pages',
       depth: 0,
       data: home({ heroImage: imageHomeDoc, metaImage: image2Doc }),
+      req,
     }),
     payload.create({
       collection: 'pages',
       depth: 0,
       data: contactPageData({ contactForm: contactForm }),
+      req,
     }),
   ])
 
@@ -143,6 +146,16 @@ async function fetchFileByURL(url: string): Promise<File> {
     name: url.split('/').pop() || `file-${Date.now()}`,
     data: Buffer.from(data),
     mimetype: `image/${url.split('.').pop()}`,
+    size: data.byteLength,
+  }
+}
+
+async function getLocalFile(filePath: string, mimetype: string): Promise<File> {
+  const data = await readFile(filePath)
+  return {
+    name: path.basename(filePath),
+    data,
+    mimetype,
     size: data.byteLength,
   }
 }

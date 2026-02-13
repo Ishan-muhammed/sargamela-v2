@@ -1,27 +1,27 @@
 const competitionCategories = [
   {
-    name: 'Kids',
-    slug: 'kids',
+    name: 'കലാ മത്സരങ്ങൾ',
+    slug: 'kala-matsarangal',
     order: 0,
   },
   {
-    name: 'Children',
-    slug: 'children',
+    name: 'സാഹിത്യ മത്സരങ്ങൾ',
+    slug: 'sahithya-matsarangal',
     order: 1,
   },
   {
-    name: 'Sub Juniors',
-    slug: 'sub-juniors',
+    name: 'ക്വിസ് & പ്രശ്നോത്തരി',
+    slug: 'quiz-prashnotthari',
     order: 2,
   },
   {
-    name: 'Juniors',
-    slug: 'juniors',
+    name: 'പ്രഭാഷണം & പ്രസംഗം',
+    slug: 'prabhashanam-prasangam',
     order: 3,
   },
   {
-    name: 'Seniors',
-    slug: 'seniors',
+    name: 'സംഘ ഇനങ്ങൾ',
+    slug: 'sangha-inangal',
     order: 4,
   },
 ]

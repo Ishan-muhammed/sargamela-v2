@@ -46,7 +46,7 @@ export const IntroSlide: React.FC<IntroSlideProps> = ({
           </motion.div>
         )}
 
-        <h1 className="text-7xl md:text-9xl font-malayalam font-bold text-white mb-2 uppercase drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)] tracking-tighter leading-relaxed space-y-4">
+        <h1 className="text-5xl md:text-7xl font-malayalam font-bold text-white mb-2 uppercase drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)] tracking-tighter leading-relaxed space-y-4">
           {titleLine1 && <div>{titleLine1}</div>}
           {titleLine2 && <div className="text-news-gold">{titleLine2}</div>}
           {titleLine3 && <div>{titleLine3}</div>}
